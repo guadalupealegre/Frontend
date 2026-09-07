@@ -1,0 +1,17 @@
+from sqlalchemy import Column, Integer, String, Float
+from app.db.database import Base
+
+
+class Producto(Base):
+    __tablename__ = "productos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    nombre = Column(String(100), nullable=False, index=True)
+    precio_final = Column(Float, nullable=False)
+    cuotas_cantidad = Column(Integer, nullable=False, default=1)
+    cuotas_valor = Column(Float, nullable=False)
+    garantia_meses = Column(Integer, nullable=False, default=0)
+    stock = Column(Integer, nullable=False, default=0)
+
+    def __repr__(self) -> str:
+        return f"<Producto(id={self.id}, nombre='{self.nombre}', precio_final={self.precio_final}, stock={self.stock})>"
