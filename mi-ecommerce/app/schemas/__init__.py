@@ -13,6 +13,12 @@ from app.schemas.usuario import (
     TokenData,
     RefreshTokenRequest,
 )
+from app.schemas.pedido import (
+    ItemIn,
+    PedidoCreate,
+    ItemOut,
+    PedidoOut,
+)
 
 __all__ = [
     "ProductoBase",
@@ -26,4 +32,8 @@ __all__ = [
     "Token",
     "TokenData",
     "RefreshTokenRequest",
+    "ItemIn",
+    "PedidoCreate",
+    "ItemOut",
+    "PedidoOut",
 ]

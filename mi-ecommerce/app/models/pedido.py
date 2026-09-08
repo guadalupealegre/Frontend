@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from sqlalchemy import Column, Integer, String, Float, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from app.db.database import Base
 
@@ -10,7 +10,7 @@ class Pedido(Base):
     id = Column(Integer, primary_key=True, index=True)
     usuario_id = Column(Integer, ForeignKey("usuarios.id", ondelete="CASCADE"), nullable=False)
     estado = Column(String(50), default="pendiente", nullable=False)  # pendiente, pagado, entregado, cancelado
-    total = Column(Float, nullable=False, default=0.0)
+    total = Column(Numeric(12, 2), nullable=False, default=0.00)
     fecha_creacion = Column(DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), nullable=False)
 
     # Relaciones

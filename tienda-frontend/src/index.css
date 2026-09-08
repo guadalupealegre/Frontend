@@ -10,37 +10,43 @@
   body {
     background-color: #faf7f2;
     color: #2c1810;
+    background-image: 
+      radial-gradient(at 100% 0%, rgba(254, 215, 170, 0.25) 0px, transparent 50%),
+      radial-gradient(at 0% 100%, rgba(255, 237, 213, 0.3) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(253, 186, 116, 0.08) 0px, transparent 50%);
+    background-attachment: fixed;
+    min-height: 100vh;
   }
 }
 
 /* Glassmorphism y sombras cálidas para repostería gourmet */
 .glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(251, 146, 60, 0.15);
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(251, 146, 60, 0.18);
 }
 
 .glass-panel-dark {
-  background: rgba(44, 24, 16, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(251, 146, 60, 0.2);
+  background: rgba(44, 24, 16, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(251, 146, 60, 0.22);
 }
 
 .card-gourmet {
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .card-gourmet:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
 }
 
-/* Animaciones suaves */
+/* Animaciones de entrada y feedback */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -48,21 +54,78 @@
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.35s ease-out forwards;
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0.8;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-/* Scrollbar personalizada */
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes popBadge {
+  0% {
+    transform: scale(0.6);
+  }
+  50% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(249, 115, 22, 0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pop-badge {
+  animation: popBadge 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Scrollbar personalizada con estilo pastel/chocolate */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f1ede6;
+  background: #f5efe6;
 }
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
-  border-radius: 4px;
+  border-radius: 9999px;
+  border: 2px solid #f5efe6;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
+  background: #ea580c;
 }

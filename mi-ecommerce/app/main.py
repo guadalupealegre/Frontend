@@ -9,7 +9,7 @@ import app.models.producto
 import app.models.usuario
 import app.models.pedido
 import app.models.item_pedido
-from app.routers import auth_router, productos_router
+from app.routers import auth_router, productos_router, pedidos_router
 
 
 @asynccontextmanager
@@ -44,6 +44,7 @@ app.add_middleware(
 # Inclusión de Routers
 app.include_router(auth_router)
 app.include_router(productos_router)
+app.include_router(pedidos_router)
 
 
 @app.get(

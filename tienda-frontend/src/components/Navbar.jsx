@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useCarrito } from '../context/CarritoContext';
 import {
   Cake,
+  ShoppingBag,
+  Package,
   User,
   ShieldCheck,
   LogOut,
@@ -16,6 +19,7 @@ import {
 
 export default function Navbar() {
   const { usuario, cerrarSesion, esAdmin } = useAuth();
+  const { cantidadTotal, abrirDrawer } = useCarrito();
   const [menuAbierto, setMenuAbierto] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,7 +33,7 @@ export default function Navbar() {
   const linkActivo = (path) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 bg-[#2c1810]/95 backdrop-blur-md border-b border-amber-900/30 text-amber-50 shadow-md">
+    <header className="sticky top-0 z-40 bg-[#2c1810]/95 backdrop-blur-md border-b border-amber-900/40 text-amber-50 shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
@@ -64,6 +68,21 @@ export default function Navbar() {
               Catálogo
             </Link>
 
+            {/* Enlace a Mis Pedidos (si está autenticado) */}
+            {usuario && (
+              <Link
+                to="/mis-pedidos"
+                className={`px-3.5 py-2 rounded-xl text-sm font-medium flex items-center space-x-1.5 transition-all ${
+                  linkActivo('/mis-pedidos')
+                    ? 'bg-amber-500/20 text-amber-200 border border-amber-500/30'
+                    : 'text-amber-100/80 hover:text-amber-100 hover:bg-amber-900/40'
+                }`}
+              >
+                <Package className="w-4 h-4 text-amber-400" />
+                <span>Mis Pedidos</span>
+              </Link>
+            )}
+
             {/* Enlace destacado de Botón de Arrepentimiento (Res. 424/2020) */}
             <Link
               to="/arrepentimiento"
@@ -93,8 +112,29 @@ export default function Navbar() {
             )}
           </nav>
 
-          {/* Sección de Usuario / Autenticación */}
-          <div className="hidden md:flex items-center space-x-3">
+          {/* Sección Derecha: Carrito + Usuario */}
+          <div className="hidden md:flex items-center space-x-4">
+            
+            {/* Botón Carrito con Badge Contador Animado */}
+            <button
+              onClick={abrirDrawer}
+              className="relative p-2.5 rounded-2xl bg-amber-950/70 border border-amber-800/60 text-amber-200 hover:text-white hover:bg-amber-900/80 transition-all duration-200 shadow-sm flex items-center space-x-2 group active:scale-95"
+              aria-label="Abrir carrito de compras"
+              title="Ver mi carrito"
+            >
+              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform text-amber-300" />
+              
+              {cantidadTotal > 0 && (
+                <span
+                  key={cantidadTotal}
+                  className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold text-[11px] min-w-[22px] h-[22px] px-1 rounded-full flex items-center justify-center border-2 border-[#2c1810] shadow-md animate-pop-badge"
+                >
+                  {cantidadTotal}
+                </span>
+              )}
+            </button>
+
+            {/* Perfil o Acceso */}
             {usuario ? (
               <div className="flex items-center space-x-3 bg-amber-950/60 border border-amber-800/40 py-1.5 px-3.5 rounded-2xl">
                 <Link
@@ -145,8 +185,24 @@ export default function Navbar() {
             )}
           </div>
 
-          {/* Botón de Menú Móvil */}
-          <div className="flex md:hidden">
+          {/* Botones Móvil: Carrito + Menú Hamburguesa */}
+          <div className="flex items-center space-x-2 md:hidden">
+            <button
+              onClick={abrirDrawer}
+              className="relative p-2 rounded-xl bg-amber-950/70 border border-amber-800/50 text-amber-200"
+              aria-label="Abrir carrito"
+            >
+              <ShoppingBag className="w-5 h-5 text-amber-300" />
+              {cantidadTotal > 0 && (
+                <span
+                  key={cantidadTotal}
+                  className="absolute -top-1.5 -right-1.5 bg-orange-500 text-white font-bold text-[10px] min-w-[18px] h-[18px] px-0.5 rounded-full flex items-center justify-center border-2 border-[#2c1810] animate-pop-badge"
+                >
+                  {cantidadTotal}
+                </span>
+              )}
+            </button>
+
             <button
               onClick={() => setMenuAbierto(!menuAbierto)}
               className="p-2 rounded-xl text-amber-200 hover:text-white hover:bg-amber-900/50 focus:outline-none"
@@ -155,6 +211,7 @@ export default function Navbar() {
               {menuAbierto ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
+
         </div>
       </div>
 
@@ -169,6 +226,31 @@ export default function Navbar() {
             >
               Catálogo de Postres
             </Link>
+
+            <Link
+              to="/carrito"
+              onClick={() => setMenuAbierto(false)}
+              className="flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-amber-900/50"
+            >
+              <div className="flex items-center space-x-2">
+                <ShoppingBag className="w-4 h-4 text-orange-400" />
+                <span>Mi Carrito</span>
+              </div>
+              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300">
+                {cantidadTotal} ítems
+              </span>
+            </Link>
+
+            {usuario && (
+              <Link
+                to="/mis-pedidos"
+                onClick={() => setMenuAbierto(false)}
+                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-amber-900/50"
+              >
+                <Package className="w-4 h-4 text-amber-400" />
+                <span>Mis Pedidos Confirmados</span>
+              </Link>
+            )}
 
             <Link
               to="/arrepentimiento"
