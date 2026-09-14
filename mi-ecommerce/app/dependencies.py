@@ -50,6 +50,13 @@ def get_current_user(
     if usuario is None:
         raise credentials_exception
 
+    if not usuario.activo:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="La cuenta del usuario ha sido dada de baja o se encuentra inactiva.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
     return usuario
 
 

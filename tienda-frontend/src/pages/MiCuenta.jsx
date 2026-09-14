@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import {
   User,
@@ -10,7 +11,10 @@ import {
   FileCheck,
   LogOut,
   Sparkles,
+  Package,
+  RotateCcw,
   ExternalLink,
+  ArrowRight,
 } from 'lucide-react';
 
 export default function MiCuenta() {
@@ -26,11 +30,15 @@ export default function MiCuenta() {
     : 'Registrado al momento de la creación';
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4 space-y-8 animate-fade-in">
-      
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="max-w-4xl mx-auto py-6 px-2 sm:px-4 space-y-8"
+    >
       {/* Cabecera del Perfil */}
-      <div className="bg-gradient-to-r from-[#382216] to-[#2c1810] rounded-3xl p-6 sm:p-8 text-amber-50 shadow-warm border border-amber-900/40 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
-        <div className="w-20 h-20 rounded-3xl bg-amber-500/20 border-2 border-amber-400/40 text-amber-300 font-display font-bold text-3xl flex items-center justify-center shrink-0 shadow-lg">
+      <div className="bg-gradient-to-r from-[#28130a] via-[#3a1d12] to-[#200f07] rounded-3xl p-6 sm:p-8 text-amber-50 shadow-warm border border-amber-900/40 flex flex-col sm:flex-row items-center sm:items-start space-y-4 sm:space-y-0 sm:space-x-6">
+        <div className="w-20 h-20 rounded-3xl bg-rose-500/20 border-2 border-rose-400/40 text-rose-300 font-display font-bold text-3xl flex items-center justify-center shrink-0 shadow-lg">
           {usuario.nombre ? usuario.nombre.charAt(0).toUpperCase() : 'U'}
         </div>
 
@@ -39,13 +47,13 @@ export default function MiCuenta() {
             <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
               {usuario.nombre}
             </h1>
-            <span className="inline-block mt-1 sm:mt-0 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            <span className="inline-block mt-1 sm:mt-0 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose-500/20 text-rose-300 border border-rose-500/30">
               Rol: {usuario.rol}
             </span>
           </div>
 
           <p className="text-xs sm:text-sm text-amber-200/80 flex items-center justify-center sm:justify-start space-x-1.5">
-            <Mail className="w-4 h-4 text-amber-400" />
+            <Mail className="w-4 h-4 text-rose-400" />
             <span>{usuario.email}</span>
           </p>
         </div>
@@ -54,15 +62,15 @@ export default function MiCuenta() {
           {esAdmin && (
             <Link
               to="/admin"
-              className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-stone-900 text-xs font-bold rounded-xl shadow-sm text-center flex items-center justify-center space-x-1.5 transition-colors"
+              className="px-4 py-2.5 bg-amber-500 hover:bg-amber-600 text-stone-900 text-xs font-bold rounded-xl shadow-sm text-center flex items-center justify-center space-x-1.5 transition-colors"
             >
               <ShieldCheck className="w-4 h-4" />
-              <span>Ir a Panel Admin</span>
+              <span>Panel Admin</span>
             </Link>
           )}
           <button
             onClick={cerrarSesion}
-            className="px-4 py-2 bg-rose-950/50 hover:bg-rose-900/60 border border-rose-500/30 text-rose-200 text-xs font-semibold rounded-xl text-center flex items-center justify-center space-x-1.5 transition-colors"
+            className="px-4 py-2.5 bg-rose-950/60 hover:bg-rose-900/70 border border-rose-500/40 text-rose-200 text-xs font-semibold rounded-xl text-center flex items-center justify-center space-x-1.5 transition-colors"
           >
             <LogOut className="w-4 h-4" />
             <span>Cerrar Sesión</span>
@@ -70,79 +78,81 @@ export default function MiCuenta() {
         </div>
       </div>
 
-      {/* Sección Legal: Datos Personales y Ley 25.326 */}
-      <div className="bg-white rounded-3xl border border-amber-100 shadow-sm p-6 sm:p-8 space-y-6">
+      {/* Accesos Rápidos a Funcionalidades Legales y Compras */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         
-        <div className="flex items-center space-x-3 border-b border-stone-100 pb-4">
-          <div className="p-2.5 bg-amber-500/10 text-amber-700 rounded-2xl">
-            <ShieldCheck className="w-6 h-6" />
-          </div>
-          <div>
-            <h2 className="font-display font-bold text-lg text-stone-900">
-              Privacidad y Protección de Datos Personales (Ley N° 25.326)
-            </h2>
-            <p className="text-xs text-stone-500">
-              Registro legal de consentimiento y garantía de derechos de los titulares de datos.
-            </p>
-          </div>
-        </div>
-
-        {/* Registro de Consentimiento */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1">
-            <div className="flex items-center space-x-2 text-stone-600 text-xs font-medium">
-              <FileCheck className="w-4 h-4 text-emerald-600" />
-              <span>Estado del Consentimiento:</span>
+        {/* Acceso a Mis Datos & Portabilidad */}
+        <Link
+          to="/mis-datos"
+          className="group bg-white rounded-3xl p-6 border border-rose-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+        >
+          <div className="flex items-start space-x-4">
+            <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-200/60 text-emerald-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <p className="text-sm font-bold text-emerald-700">
-              {usuario.acepto_tratamiento ? 'Aceptado libre y expresamente' : 'Pendiente'}
-            </p>
-          </div>
-
-          <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1">
-            <div className="flex items-center space-x-2 text-stone-600 text-xs font-medium">
-              <Calendar className="w-4 h-4 text-amber-600" />
-              <span>Fecha y Hora de Consentimiento:</span>
+            <div>
+              <h3 className="font-display font-bold text-lg text-stone-900 group-hover:text-rose-600 transition-colors">
+                Mis Datos & Portabilidad (Ley 25.326)
+              </h3>
+              <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                Descargá el archivo JSON con tu historial de datos, revisá el consentimiento y gestioná tus derechos de supresión.
+              </p>
             </div>
-            <p className="text-xs font-semibold text-stone-800">
-              {fechaFormateada}
-            </p>
           </div>
-        </div>
-
-        {/* Información de Derechos ARCO */}
-        <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/70 space-y-3 text-xs text-stone-700 leading-relaxed">
-          <h3 className="font-bold text-amber-950 text-sm flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-orange-600" />
-            <span>Tus derechos como consumidor y titular de datos:</span>
-          </h3>
-          <ul className="space-y-2 list-disc list-inside text-stone-600">
-            <li>
-              <strong className="text-stone-800">Derecho de Acceso (Art. 14):</strong> Podés solicitar información sobre tus datos personales almacenados en Dulce Vicio de forma gratuita en intervalos no inferiores a seis meses.
-            </li>
-            <li>
-              <strong className="text-stone-800">Derecho de Rectificación y Supresión (Art. 16):</strong> Podés solicitar la corrección, actualización o supresión definitiva de tus datos en cualquier momento.
-            </li>
-            <li>
-              <strong className="text-stone-800">Órgano de Control:</strong> La Agencia de Acceso a la Información Pública (AAIP), en su carácter de Órgano de Control de la Ley N° 25.326, tiene la atribución de atender denuncias y reclamos.
-            </li>
-          </ul>
-
-          <div className="pt-2">
-            <a
-              href="https://www.argentina.gob.ar/aaip/datospersonales"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center space-x-1.5 text-xs text-orange-700 font-semibold hover:underline"
-            >
-              <span>Conocer más en el portal oficial de la AAIP</span>
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
+          <div className="flex items-center text-xs font-bold text-rose-600 space-x-1 self-end">
+            <span>Gestionar mis datos</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </div>
-        </div>
+        </Link>
+
+        {/* Acceso a Mis Pedidos */}
+        <Link
+          to="/mis-pedidos"
+          className="group bg-white rounded-3xl p-6 border border-rose-100 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-4"
+        >
+          <div className="flex items-start space-x-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200/60 text-rose-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+              <Package className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-display font-bold text-lg text-stone-900 group-hover:text-rose-600 transition-colors">
+                Historial de Mis Pedidos
+              </h3>
+              <p className="text-xs text-stone-500 mt-1 leading-relaxed">
+                Revisá tus pedidos realizados, precios congelados y ejercé el derecho de arrepentimiento de compras activas.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center text-xs font-bold text-rose-600 space-x-1 self-end">
+            <span>Ver mis compras</span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </Link>
 
       </div>
 
-    </div>
+      {/* Sección Legal Informativa */}
+      <div className="bg-white rounded-3xl border border-rose-100 shadow-sm p-6 sm:p-8 space-y-4">
+        <div className="flex items-center space-x-3 pb-3 border-b border-stone-100">
+          <div className="p-2.5 bg-rose-500/10 text-rose-700 rounded-2xl">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <h2 className="font-display font-bold text-base text-stone-900">
+            Registro de Consentimiento Legal
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+          <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1">
+            <span className="text-stone-500 block">Estado del Consentimiento:</span>
+            <span className="font-bold text-emerald-700">Aceptado libre y expresamente</span>
+          </div>
+          <div className="p-4 rounded-2xl bg-stone-50 border border-stone-200/80 space-y-1">
+            <span className="text-stone-500 block">Fecha y Hora de Registro:</span>
+            <span className="font-semibold text-stone-800">{fechaConsentimientoFormateada}</span>
+          </div>
+        </div>
+      </div>
+    </motion.div>
   );
 }

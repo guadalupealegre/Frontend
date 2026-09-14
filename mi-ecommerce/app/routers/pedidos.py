@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.dependencies import get_db, get_current_user
 from app.models.usuario import Usuario
-from app.schemas.pedido import PedidoCreate, PedidoOut
+from app.schemas.pedido import PedidoCreate, PedidoOut, SolicitudRevocacionOut
 from app.services import pedido_service
 
 router = APIRouter(
@@ -46,6 +46,24 @@ def listar_mis_pedidos(
     Retorna todos los pedidos pertenecientes al usuario en sesión.
     """
     return pedido_service.listar_pedidos_usuario(db=db, usuario_id=current_user.id)
+
+
+@router.post(
+    "/{pedido_id}/revocacion",
+    response_model=SolicitudRevocacionOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Ejercer derecho de arrepentimiento / revocar compra (Ley 24.240 Art. 34 / Disp. 954/2025)",
+    description="Revoca una compra dentro del plazo legal de 10 días corridos. Reincorpora el stock y genera el código ARR-YYYYMMDD-XXXXXX.",
+)
+def revocar_pedido(
+    pedido_id: int,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user),
+):
+    """
+    Endpoint de revocación transaccional con generación de comprobante legal oficial.
+    """
+    return pedido_service.revocar(db=db, usuario=current_user, pedido_id=pedido_id)
 
 
 @router.get(

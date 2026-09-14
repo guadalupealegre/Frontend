@@ -12,12 +12,13 @@ import MisPedidos from './pages/MisPedidos';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import MiCuenta from './pages/MiCuenta';
+import MisDatos from './pages/MisDatos';
 import Admin from './pages/Admin';
 import Arrepentimiento from './pages/Arrepentimiento';
 
 export default function App() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#faf7f2] text-[#2c1810]">
+    <div className="flex flex-col min-h-screen bg-[#faf7f2] text-[#27140c]">
       {/* Barra de Navegación Global */}
       <Navbar />
 
@@ -31,12 +32,21 @@ export default function App() {
           <Route path="/registro" element={<Registro />} />
           <Route path="/arrepentimiento" element={<Arrepentimiento />} />
 
-          {/* Rutas Protegidas de Usuario (Clase 8 & Perfil) */}
+          {/* Rutas Protegidas de Usuario (Clase 8 & 9) */}
           <Route
             path="/mis-pedidos"
             element={
               <RutaProtegida>
                 <MisPedidos />
+              </RutaProtegida>
+            }
+          />
+
+          <Route
+            path="/mis-datos"
+            element={
+              <RutaProtegida>
+                <MisDatos />
               </RutaProtegida>
             }
           />

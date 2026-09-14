@@ -30,6 +30,8 @@ class UsuarioOut(UsuarioBase):
     rol: str
     acepto_tratamiento: bool
     fecha_consentimiento: Optional[datetime] = None
+    activo: bool = True
+    fecha_baja: Optional[datetime] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -49,3 +51,20 @@ class TokenData(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     refresh_token: str
+
+
+class SolicitudRevocacionSimple(BaseModel):
+    id: int
+    codigo: str
+    pedido_id: int
+    creada_en: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class DatosUsuarioCompleto(BaseModel):
+    usuario: UsuarioOut
+    pedidos: list
+    solicitudes_revocacion: list[SolicitudRevocacionSimple]
+
+    model_config = ConfigDict(from_attributes=True)

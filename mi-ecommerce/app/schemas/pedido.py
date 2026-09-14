@@ -23,6 +23,16 @@ class ItemOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class SolicitudRevocacionOut(BaseModel):
+    id: int
+    codigo: str
+    pedido_id: int
+    usuario_id: int
+    creada_en: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class PedidoOut(BaseModel):
     id: int
     usuario_id: int
@@ -30,5 +40,6 @@ class PedidoOut(BaseModel):
     total: float
     fecha_creacion: datetime
     items: List[ItemOut]
+    solicitud_revocacion: Optional[SolicitudRevocacionOut] = None
 
     model_config = ConfigDict(from_attributes=True)

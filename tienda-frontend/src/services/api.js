@@ -243,3 +243,76 @@ export async function getPedido(id, token) {
     headers: authHeaders(token),
   });
 }
+
+/**
+ * Revoca un pedido ejerciendo el derecho legal de arrepentimiento (Clase 9).
+ * @param {number} pedidoId
+ * @param {string} token
+ */
+export async function revocarPedido(pedidoId, token) {
+  return await request(`/pedidos/${pedidoId}/revocacion`, {
+    method: 'POST',
+    headers: authHeaders(token),
+  });
+}
+
+// ==========================================
+// SERVICIOS DE USUARIOS Y PROTECCIÓN DE DATOS (CLASE 9)
+// ==========================================
+
+/**
+ * Obtiene el informe completo de datos personales, consentimiento, pedidos y revocaciones (Ley 25.326).
+ * @param {string} token
+ */
+export async function getMisDatos(token) {
+  return await request('/usuarios/me/datos', {
+    method: 'GET',
+    headers: authHeaders(token),
+  });
+}
+
+/**
+ * Descarga el archivo mis_datos.json directamente en el navegador del usuario.
+ * @param {string} token
+ */
+export async function exportarMisDatos(token) {
+  const url = `${API_BASE_URL}/usuarios/me/exportar`;
+  try {
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: authHeaders(token),
+    });
+
+    if (!response.ok) {
+      const errorMsg = await parseErrorResponse(response);
+      throw new Error(errorMsg);
+    }
+
+    const blob = await response.blob();
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', 'mis_datos.json');
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+    return true;
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message.includes('fetch')) {
+      throw new Error('No se pudo descargar el archivo. Verifique la conexión con el servidor.');
+    }
+    throw err;
+  }
+}
+
+/**
+ * Da de baja la cuenta y anonimiza los datos personales (Ley 25.326 Art. 16).
+ * @param {string} token
+ */
+export async function eliminarMiCuenta(token) {
+  return await request('/usuarios/me', {
+    method: 'DELETE',
+    headers: authHeaders(token),
+  });
+}

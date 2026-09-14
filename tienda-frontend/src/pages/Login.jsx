@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { login } from '../services/api';
 import {
@@ -23,7 +24,7 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const origen = location.state?.from?.pathname || '/';
+  const origen = location.state?.from?.pathname || location.state?.from || '/';
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -31,7 +32,6 @@ export default function Login() {
     setCargando(true);
 
     try {
-      // El backend espera form-data con 'username' para el email
       const data = await login({
         username: email,
         password: password,
@@ -46,7 +46,6 @@ export default function Login() {
     }
   };
 
-  // Ayudante de prueba rápida para desarrollo
   const cargarCredenciales = (tipo) => {
     if (tipo === 'admin') {
       setEmail('admin@dulcevicio.com');
@@ -59,12 +58,17 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto py-8 px-4 animate-fade-in">
-      <div className="bg-white rounded-3xl border border-amber-100/90 shadow-warm p-6 sm:p-10 space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="max-w-md mx-auto py-8 px-4"
+    >
+      <div className="bg-white rounded-3xl border border-rose-100 shadow-warm p-6 sm:p-10 space-y-6">
         
         {/* Cabecera */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-400 text-white flex items-center justify-center mx-auto shadow-md shadow-orange-500/20">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-600 to-amber-500 text-white flex items-center justify-center mx-auto shadow-md shadow-rose-600/20">
             <Cake className="w-6 h-6" />
           </div>
           <h1 className="font-display font-bold text-2xl sm:text-3xl text-stone-900">
@@ -77,7 +81,7 @@ export default function Login() {
 
         {/* Mensaje de Error */}
         {error && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-2xl flex items-start space-x-3 text-sm animate-fade-in">
+          <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-2xl flex items-start space-x-3 text-sm">
             <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
             <div>
               <p className="font-semibold">Error de autenticación</p>
@@ -103,7 +107,7 @@ export default function Login() {
                 placeholder="nombre@ejemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
               />
             </div>
           </div>
@@ -122,7 +126,7 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-orange-400/40 focus:border-orange-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
               />
             </div>
           </div>
@@ -131,7 +135,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={cargando}
-            className="w-full py-3.5 px-4 rounded-2xl font-semibold text-sm bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-orange-500/25 hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-60"
+            className="w-full py-3.5 px-4 rounded-2xl font-semibold text-sm bg-gradient-to-r from-rose-500 via-rose-600 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white shadow-rose-500/25 hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-60"
           >
             {cargando ? (
               <>
@@ -156,9 +160,9 @@ export default function Login() {
             <button
               type="button"
               onClick={() => cargarCredenciales('admin')}
-              className="px-2.5 py-1.5 text-xs bg-amber-50 text-amber-900 border border-amber-200 rounded-xl hover:bg-amber-100 flex items-center justify-center space-x-1 transition-colors"
+              className="px-2.5 py-1.5 text-xs bg-rose-50 text-rose-900 border border-rose-200 rounded-xl hover:bg-rose-100 flex items-center justify-center space-x-1 transition-colors"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-amber-700" />
+              <ShieldCheck className="w-3.5 h-3.5 text-rose-700" />
               <span>Admin Demo</span>
             </button>
             <button
@@ -175,12 +179,12 @@ export default function Login() {
         {/* Footer */}
         <div className="text-center pt-2 text-xs text-stone-500">
           ¿Aún no tenés cuenta?{' '}
-          <Link to="/registro" className="font-semibold text-orange-600 hover:text-orange-700 hover:underline">
+          <Link to="/registro" className="font-semibold text-rose-600 hover:text-rose-700 hover:underline">
             Registrate ahora
           </Link>
         </div>
 
       </div>
-    </div>
+    </motion.div>
   );
 }

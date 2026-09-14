@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { useCarrito } from '../context/CarritoContext';
 import { ShoppingBag, CreditCard, Shield, CheckCircle2, Sparkles, AlertCircle, Plus } from 'lucide-react';
 
 // Temas y badges para los postres emblemáticos de Dulce Vicio
 const ICONOS_POSTRES = {
-  'Tiramisú': { emoji: '☕🍰', badge: 'Especialidad Italiana', color: 'from-amber-700 via-amber-800 to-yellow-950' },
-  'Brownie': { emoji: '🍫✨', badge: 'Chocolate Puro Intenso', color: 'from-stone-900 via-amber-950 to-stone-950' },
-  'Chocotorta': { emoji: '🍪🎂', badge: 'Clásico Argentino', color: 'from-amber-900 via-orange-950 to-amber-950' },
-  'Turrón de Quaker': { emoji: '🌾🍫', badge: 'Avena & Cacao Fino', color: 'from-amber-800 via-yellow-900 to-amber-950' },
-  'Budín de pan': { emoji: '🍮🍯', badge: 'Receta Tradicional', color: 'from-amber-600 via-orange-800 to-yellow-900' },
-  'Flan': { emoji: '🍮✨', badge: 'Caramelo Artesanal', color: 'from-yellow-600 via-amber-700 to-orange-900' },
-  'Cookie': { emoji: '🍪🍪', badge: 'Chips Artesanales', color: 'from-orange-700 via-amber-800 to-stone-900' },
+  'Tiramisú': { emoji: '☕🍰', badge: 'Especialidad Italiana', color: 'from-amber-800 via-rose-950 to-stone-950' },
+  'Brownie': { emoji: '🍫✨', badge: 'Chocolate Puro Intenso', color: 'from-stone-900 via-rose-950 to-stone-950' },
+  'Chocotorta': { emoji: '🍪🎂', badge: 'Clásico Argentino', color: 'from-rose-900 via-amber-950 to-stone-950' },
+  'Turrón de Quaker': { emoji: '🌾🍫', badge: 'Avena & Cacao Fino', color: 'from-amber-800 via-rose-900 to-stone-950' },
+  'Budín de pan': { emoji: '🍮🍯', badge: 'Receta Tradicional', color: 'from-amber-700 via-rose-800 to-amber-950' },
+  'Flan': { emoji: '🍮✨', badge: 'Caramelo Artesanal', color: 'from-amber-600 via-rose-700 to-stone-900' },
+  'Cookie': { emoji: '🍪🍪', badge: 'Chips Artesanales', color: 'from-rose-800 via-amber-800 to-stone-900' },
 };
 
 export default function ProductCard({ producto }) {
@@ -30,7 +31,7 @@ export default function ProductCard({ producto }) {
   const infoVisual = ICONOS_POSTRES[nombre] || {
     emoji: '🧁✨',
     badge: 'Repostería Fina',
-    color: 'from-amber-700 via-orange-800 to-stone-900',
+    color: 'from-rose-800 via-stone-900 to-stone-950',
   };
 
   const handleAgregarAlCarrito = () => {
@@ -41,16 +42,21 @@ export default function ProductCard({ producto }) {
   };
 
   return (
-    <div className="card-gourmet bg-white rounded-3xl border border-amber-100/90 shadow-lg hover:shadow-2xl overflow-hidden flex flex-col justify-between group transition-all duration-300 transform hover:-translate-y-1.5">
-      
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.3 }}
+      className="card-gourmet bg-white rounded-3xl border border-rose-100/90 shadow-md hover:shadow-xl overflow-hidden flex flex-col justify-between group"
+    >
       {/* Cabecera / Ilustración con Zoom Fluido */}
       <div className={`relative h-48 bg-gradient-to-br ${infoVisual.color} flex items-center justify-center overflow-hidden`}>
         {/* Patrón de puntos decorativos */}
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
+        <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px]" />
         
         {/* Badge superior de especialidad */}
-        <div className="absolute top-3.5 left-3.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-medium text-amber-200 border border-white/10 flex items-center space-x-1.5 shadow-sm">
-          <Sparkles className="w-3 h-3 text-amber-400" />
+        <div className="absolute top-3.5 left-3.5 bg-black/40 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-medium text-rose-200 border border-white/10 flex items-center space-x-1.5 shadow-sm">
+          <Sparkles className="w-3 h-3 text-rose-400" />
           <span>{infoVisual.badge}</span>
         </div>
 
@@ -68,14 +74,14 @@ export default function ProductCard({ producto }) {
         </div>
 
         {/* Píldora Flotante de Precio con Animación */}
-        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-3.5 py-1 rounded-2xl border border-amber-200/80 shadow-md transform group-hover:scale-105 transition-transform duration-300">
+        <div className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-3.5 py-1 rounded-2xl border border-rose-200/80 shadow-md transform group-hover:scale-105 transition-transform duration-300">
           <span className="text-[10px] text-stone-500 block uppercase font-bold tracking-wider leading-none">Contado</span>
-          <span className="font-display font-extrabold text-lg text-amber-950 leading-tight">
-            ${precio_final.toLocaleString('es-AR')}
+          <span className="font-display font-extrabold text-lg text-rose-950 leading-tight">
+            ${Number(precio_final).toLocaleString('es-AR')}
           </span>
         </div>
 
-        {/* Emoji Central con Zoom Fluido (duration-500) */}
+        {/* Emoji Central con Zoom Fluido */}
         <div className="text-6xl sm:text-7xl group-hover:scale-110 duration-500 transition-transform drop-shadow-lg select-none">
           {infoVisual.emoji}
         </div>
@@ -84,7 +90,7 @@ export default function ProductCard({ producto }) {
       {/* Cuerpo de la Card */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
-          <h3 className="font-display font-bold text-xl text-stone-900 group-hover:text-amber-800 transition-colors">
+          <h3 className="font-display font-bold text-xl text-stone-900 group-hover:text-rose-700 transition-colors">
             {nombre}
           </h3>
           <p className="text-xs text-stone-500 mt-1 leading-relaxed">
@@ -93,19 +99,19 @@ export default function ProductCard({ producto }) {
         </div>
 
         {/* Cuadro de Precios y Financiación (Ley 24.240) */}
-        <div className="bg-amber-50/70 rounded-2xl p-3.5 border border-amber-200/70 space-y-2">
+        <div className="bg-rose-50/50 rounded-2xl p-3.5 border border-rose-100 space-y-2">
           {/* Información de Cuotas */}
-          <div className="flex items-center space-x-1.5 text-xs text-amber-900 font-medium">
-            <CreditCard className="w-4 h-4 text-orange-600 shrink-0" />
+          <div className="flex items-center space-x-1.5 text-xs text-stone-800 font-medium">
+            <CreditCard className="w-4 h-4 text-rose-600 shrink-0" />
             <span>
               {cuotas_cantidad === 1
-                ? `1 pago de $${cuotas_valor.toLocaleString('es-AR')}`
-                : `${cuotas_cantidad} cuotas de $${cuotas_valor.toLocaleString('es-AR')}`}
+                ? `1 pago de $${Number(cuotas_valor).toLocaleString('es-AR')}`
+                : `${cuotas_cantidad} cuotas de $${Number(cuotas_valor).toLocaleString('es-AR')}`}
             </span>
           </div>
 
           {/* Información Legal de Garantía */}
-          <div className="flex items-center space-x-1.5 text-[11px] text-stone-500 pt-1 border-t border-amber-200/50">
+          <div className="flex items-center space-x-1.5 text-[11px] text-stone-500 pt-1 border-t border-rose-100">
             <Shield className="w-3.5 h-3.5 text-stone-400 shrink-0" />
             <span>
               Garantía: {garantia_meses} meses (Consumo directo perecedero)
@@ -122,7 +128,7 @@ export default function ProductCard({ producto }) {
               ? 'bg-stone-200 text-stone-400 cursor-not-allowed border border-stone-300 shadow-none'
               : agregadoAnim
               ? 'bg-emerald-600 text-white shadow-emerald-500/30'
-              : 'bg-gradient-to-r from-orange-500 via-orange-600 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-orange-500/25 hover:shadow-lg'
+              : 'bg-gradient-to-r from-rose-500 via-rose-600 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white shadow-rose-500/25 hover:shadow-lg'
           }`}
         >
           {stock <= 0 ? (
@@ -145,6 +151,6 @@ export default function ProductCard({ producto }) {
         </button>
       </div>
 
-    </div>
+    </motion.div>
   );
 }

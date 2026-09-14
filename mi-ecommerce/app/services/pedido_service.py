@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from decimal import Decimal
 from typing import List, Optional
 from fastapi import HTTPException, status
@@ -7,6 +8,7 @@ from app.models.producto import Producto
 from app.models.pedido import Pedido
 from app.models.item_pedido import ItemPedido
 from app.models.usuario import Usuario
+from app.models.solicitud_revocacion import SolicitudRevocacion
 from app.schemas.pedido import PedidoCreate
 
 
@@ -112,3 +114,95 @@ def obtener_pedido_usuario(db: Session, pedido_id: int, usuario_id: int) -> Opti
         .filter(Pedido.id == pedido_id, Pedido.usuario_id == usuario_id)
         .first()
     )
+
+
+def generar_codigo_revocacion() -> str:
+    """
+    Genera un código único de revocación conforme a la Disp. 954/2025.
+    Formato: ARR-YYYYMMDD-XXXXXX
+    """
+    import secrets
+    fecha_str = datetime.now(timezone.utc).strftime("%Y%m%d")
+    sufijo_aleatorio = secrets.token_hex(3).upper()
+    return f"ARR-{fecha_str}-{sufijo_aleatorio}"
+
+
+def revocar(db: Session, usuario: Usuario, pedido_id: int) -> SolicitudRevocacion:
+    """
+    Servicio de Revocación de Compra conforme a la Ley 24.240 Art. 34 y Disp. 954/2025.
+    Ejecuta las 4 validaciones en el orden estricto requerido:
+    1. Verificar que el pedido pertenezca al usuario (404 Not Found).
+    2. Verificar que el pedido no esté cancelado (409 Conflict).
+    3. Verificar que esté dentro del plazo de 10 días corridos desde la creación (409 Conflict).
+    4. En una transacción atómica:
+       - Devuelve el stock a los productos correspondientes.
+       - Marca el pedido como "cancelado".
+       - Registra la SolicitudRevocacion con su código único.
+    """
+    # 1. Validación de pertenencia y existencia
+    pedido = db.query(Pedido).filter(Pedido.id == pedido_id, Pedido.usuario_id == usuario.id).first()
+    if not pedido:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Pedido con ID {pedido_id} no encontrado o no pertenece a su cuenta.",
+        )
+
+    # 2. Validación de estado no cancelado
+    if pedido.estado.lower() == "cancelado":
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="El pedido ya se encuentra cancelado o revocado previamente.",
+        )
+
+    # 3. Validación de plazo legal de 10 días corridos (timezone-aware UTC)
+    ahora_utc = datetime.now(timezone.utc)
+    fecha_pedido = pedido.fecha_creacion
+    if fecha_pedido.tzinfo is None:
+        fecha_pedido = fecha_pedido.replace(tzinfo=timezone.utc)
+
+    dias_transcurridos = (ahora_utc - fecha_pedido).total_seconds() / 86400
+    if dias_transcurridos > 10:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="El plazo legal de 10 días corridos para revocar la compra ha expirado conforme al Art. 34 de la Ley 24.240.",
+        )
+
+    # 4. Transacción atómica
+    try:
+        # A. Devolver stock de cada producto incluido
+        for item in pedido.items:
+            producto = db.query(Producto).filter(Producto.id == item.producto_id).first()
+            if producto:
+                producto.stock += item.cantidad
+
+        # B. Modificar estado del pedido a cancelado
+        pedido.estado = "cancelado"
+
+        # C. Generar código único y crear registro de revocación
+        codigo_generado = generar_codigo_revocacion()
+        # Asegurar unicidad absoluta
+        while db.query(SolicitudRevocacion).filter(SolicitudRevocacion.codigo == codigo_generado).first():
+            codigo_generado = generar_codigo_revocacion()
+
+        solicitud = SolicitudRevocacion(
+            codigo=codigo_generado,
+            pedido_id=pedido.id,
+            usuario_id=usuario.id,
+            creada_en=ahora_utc,
+        )
+        db.add(solicitud)
+
+        db.commit()
+        db.refresh(solicitud)
+        db.refresh(pedido)
+        return solicitud
+
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error transaccional al procesar la revocación del pedido: {str(exc)}",
+        )

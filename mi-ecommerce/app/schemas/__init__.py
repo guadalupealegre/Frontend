@@ -12,12 +12,15 @@ from app.schemas.usuario import (
     Token,
     TokenData,
     RefreshTokenRequest,
+    SolicitudRevocacionSimple,
+    DatosUsuarioCompleto,
 )
 from app.schemas.pedido import (
     ItemIn,
     PedidoCreate,
     ItemOut,
     PedidoOut,
+    SolicitudRevocacionOut,
 )
 
 __all__ = [
@@ -32,8 +35,11 @@ __all__ = [
     "Token",
     "TokenData",
     "RefreshTokenRequest",
+    "SolicitudRevocacionSimple",
+    "DatosUsuarioCompleto",
     "ItemIn",
     "PedidoCreate",
     "ItemOut",
     "PedidoOut",
+    "SolicitudRevocacionOut",
 ]

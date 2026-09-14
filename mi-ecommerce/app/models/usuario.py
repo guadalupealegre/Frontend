@@ -13,9 +13,12 @@ class Usuario(Base):
     rol = Column(String(20), default="cliente", nullable=False)  # 'cliente' o 'admin'
     acepto_tratamiento = Column(Boolean, default=False, nullable=False)
     fecha_consentimiento = Column(DateTime(timezone=True), nullable=True)
+    activo = Column(Boolean, default=True, nullable=False)
+    fecha_baja = Column(DateTime(timezone=True), nullable=True)
 
-    # Relación con pedidos
+    # Relaciones
     pedidos = relationship("Pedido", back_populates="usuario", cascade="all, delete-orphan")
+    solicitudes_revocacion = relationship("SolicitudRevocacion", back_populates="usuario", cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
-        return f"<Usuario(id={self.id}, email='{self.email}', rol='{self.rol}', acepto_tratamiento={self.acepto_tratamiento})>"
+        return f"<Usuario(id={self.id}, email='{self.email}', rol='{self.rol}', activo={self.activo})>"

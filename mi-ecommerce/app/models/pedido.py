@@ -16,6 +16,7 @@ class Pedido(Base):
     # Relaciones
     usuario = relationship("Usuario", back_populates="pedidos")
     items = relationship("ItemPedido", back_populates="pedido", cascade="all, delete-orphan")
+    solicitud_revocacion = relationship("SolicitudRevocacion", back_populates="pedido", uselist=False, cascade="all, delete-orphan")
 
     def __repr__(self) -> str:
         return f"<Pedido(id={self.id}, usuario_id={self.usuario_id}, estado='{self.estado}', total={self.total})>"

@@ -1,206 +1,417 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
+import { useCarrito } from '../context/CarritoContext';
+import { getMisPedidos, revocarPedido } from '../services/api';
 import {
   RotateCcw,
   Scale,
+  ShieldCheck,
   CheckCircle2,
   AlertCircle,
   FileText,
   Clock,
   Send,
   HelpCircle,
+  LogIn,
+  Package,
+  ArrowRight,
+  Loader2,
+  Copy,
+  Check,
+  Sparkles,
 } from 'lucide-react';
 
 export default function Arrepentimiento() {
-  const [form, setForm] = useState({
+  const { usuario, token } = useAuth();
+  const { agregarToast } = useCarrito();
+  const navigate = useNavigate();
+
+  // Estado para usuarios logueados (pedidos activos)
+  const [pedidos, setPedidos] = useState([]);
+  const [cargandoPedidos, setCargandoPedidos] = useState(false);
+  const [revocandoId, setRevocandoId] = useState(null);
+  const [codigoExito, setCodigoExito] = useState(null);
+  const [copiado, setCopiado] = useState(false);
+
+  // Estado para usuarios no logueados (formulario manual)
+  const [formManual, setFormManual] = useState({
     numeroPedido: '',
     email: '',
-    motivo: '',
     telefono: '',
+    motivo: '',
   });
+  const [enviandoManual, setEnviandoManual] = useState(false);
+  const [tramiteManualGenerado, setTramiteManualGenerado] = useState(null);
 
-  const [codigoTramite, setCodigoTramite] = useState(null);
-  const [enviando, setEnviando] = useState(false);
+  useEffect(() => {
+    if (token) {
+      setCargandoPedidos(true);
+      getMisPedidos(token)
+        .then((data) => setPedidos(data || []))
+        .catch((err) => console.error('Error al cargar pedidos:', err))
+        .finally(() => setCargandoPedidos(false));
+    }
+  }, [token]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+  const puedeRevocar = (pedido) => {
+    if (!pedido || pedido.estado.toLowerCase() === 'cancelado') return false;
+    const fechaPedido = new Date(pedido.fecha_creacion);
+    if (isNaN(fechaPedido.getTime())) return false;
+    const diferenciaDias = (new Date() - fechaPedido) / (1000 * 60 * 60 * 24);
+    return diferenciaDias <= 10;
   };
 
-  const handleSubmit = (e) => {
+  const handleRevocarDirecto = async (pedidoId) => {
+    if (revocandoId) return;
+    setRevocandoId(pedidoId);
+    try {
+      const res = await revocarPedido(pedidoId, token);
+      setCodigoExito(res.codigo);
+      agregarToast(`Pedido #${pedidoId} revocado con éxito. Código: ${res.codigo}`, 'success');
+      // Refrescar lista
+      const data = await getMisPedidos(token);
+      setPedidos(data || []);
+    } catch (err) {
+      console.error('Error al revocar:', err);
+      agregarToast(err.message || 'Error al revocar el pedido.', 'error');
+    } finally {
+      setRevocandoId(null);
+    }
+  };
+
+  const handleManualSubmit = (e) => {
     e.preventDefault();
-    setEnviando(true);
-
-    // Simulación del procesamiento inmediato y generación de código legal único
+    setEnviandoManual(true);
     setTimeout(() => {
-      const codigo = `REV-${Math.floor(100000 + Math.random() * 900000)}`;
-      setCodigoTramite(codigo);
-      setEnviando(false);
-    }, 800);
+      const fecha = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      const sufijo = Math.random().toString(36).substring(2, 8).toUpperCase();
+      const codigo = `ARR-${fecha}-${sufijo}`;
+      setTramiteManualGenerado(codigo);
+      setEnviandoManual(false);
+      agregarToast('Solicitud de trámite generada con éxito.', 'success');
+    }, 600);
   };
+
+  const handleCopiar = (codigo) => {
+    navigator.clipboard.writeText(codigo);
+    setCopiado(true);
+    setTimeout(() => setCopiado(false), 2000);
+  };
+
+  const pedidosRevocables = pedidos.filter(puedeRevocar);
 
   return (
-    <div className="max-w-3xl mx-auto py-8 px-4 space-y-8 animate-fade-in">
-      
-      {/* Banner Legal */}
-      <div className="bg-rose-50 border border-rose-200/80 rounded-3xl p-6 sm:p-8 space-y-3">
-        <div className="flex items-center space-x-3 text-rose-800">
-          <div className="p-3 bg-rose-600 text-white rounded-2xl shadow-sm">
-            <RotateCcw className="w-6 h-6" />
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35 }}
+      className="max-w-4xl mx-auto space-y-8 py-4 px-2 sm:px-4"
+    >
+      {/* Banner Legal Informativo */}
+      <div className="bg-gradient-to-r from-rose-950 via-rose-900 to-amber-950 text-rose-50 rounded-3xl p-6 sm:p-8 shadow-warm border border-rose-800/50 space-y-4">
+        <div className="flex items-center space-x-3.5">
+          <div className="p-3.5 bg-rose-500/20 text-rose-300 rounded-2xl border border-rose-500/30 shrink-0">
+            <RotateCcw className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="font-display font-bold text-xl sm:text-2xl text-rose-950">
+            <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-rose-300 uppercase tracking-wider mb-0.5">
+              <Scale className="w-3.5 h-3.5" />
+              <span>Resolución 424/2020 & Ley N° 24.240 Art. 34</span>
+            </div>
+            <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
               Botón de Arrepentimiento
             </h1>
-            <p className="text-xs text-rose-800/80 font-medium">
-              Resolución 424/2020 - Secretaría de Comercio Interior & Ley N° 24.240
-            </p>
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-rose-900/90 leading-relaxed pt-2">
-          De acuerdo con la legislación argentina, en las compras celebradas fuera de los establecimientos comerciales o a distancia (comercio electrónico), tenés derecho a revocar la aceptación dentro del plazo de <strong className="text-rose-950 font-bold">diez (10) días corridos</strong> contados a partir de la entrega del producto o de la celebración del contrato, sin cargo ni costo alguno.
-        </p>
+        <div className="p-4 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 text-xs sm:text-sm text-rose-100/90 leading-relaxed space-y-2">
+          <p>
+            En cumplimiento con la normativa comercial argentina para contrataciones a distancia y comercio electrónico, tenés derecho a <strong>revocar tu compra dentro de los diez (10) días corridos</strong> contados a partir de la fecha de entrega del producto o de la celebración del contrato.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 text-[11px] font-medium text-rose-200">
+            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
+              <Sparkles className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>Sin costo ni penalidad</span>
+            </div>
+            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
+              <ShieldCheck className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>Gastos a cargo del vendedor</span>
+            </div>
+            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
+              <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+              <span>Código legal inmediato</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Resultado de Código de Trámite */}
-      {codigoTramite ? (
-        <div className="bg-white rounded-3xl border border-emerald-200 p-8 shadow-warm space-y-6 text-center animate-fade-in">
-          <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-10 h-10" />
-          </div>
-
-          <div className="space-y-2">
-            <h2 className="font-display font-bold text-2xl text-stone-900">
-              Solicitud de Revocación Registrada
-            </h2>
-            <p className="text-xs text-stone-600 max-w-md mx-auto">
-              Hemos generado el comprobante de revocación de compra conforme a la Resolución 424/2020.
-            </p>
-          </div>
-
-          <div className="p-5 bg-stone-50 rounded-2xl border border-dashed border-stone-300 max-w-md mx-auto space-y-2">
-            <span className="text-xs text-stone-500 uppercase tracking-wider font-semibold block">
-              Código de Identificación de Trámite:
-            </span>
-            <span className="font-mono font-extrabold text-2xl text-orange-600 tracking-wider block">
-              {codigoTramite}
-            </span>
-            <p className="text-[11px] text-stone-500">
-              Guardá este código como constancia legal de tu solicitud.
-            </p>
-          </div>
-
-          <div className="text-xs text-stone-600 max-w-lg mx-auto leading-relaxed text-left bg-amber-50 p-4 rounded-2xl border border-amber-200">
-            <p className="font-semibold text-amber-900 mb-1">Próximos pasos:</p>
-            <ul className="list-disc list-inside space-y-1 text-stone-700">
-              <li>Nos comunicaremos al correo <strong>{form.email}</strong> dentro de las 24 horas hábiles.</li>
-              <li>Si el postre no fue despachado, el reembolso se procesará de forma inmediata por el mismo medio de pago.</li>
-            </ul>
-          </div>
-
-          <div className="pt-2">
-            <Link
-              to="/"
-              className="inline-block px-6 py-3 bg-stone-900 text-white text-xs font-semibold rounded-2xl hover:bg-stone-800 transition-colors"
+      {/* CASO A: USUARIO AUTENTICADO */}
+      {usuario ? (
+        <div className="space-y-6">
+          {/* Resultado de Código Exitoso */}
+          {codigoExito && (
+            <div
+              role="status"
+              className="bg-white rounded-3xl border-2 border-rose-400 p-6 sm:p-8 shadow-warm space-y-5 text-center"
             >
-              Volver a la Tienda
-            </Link>
+              <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-10 h-10" />
+              </div>
+              <div className="space-y-1">
+                <h2 className="font-display font-bold text-2xl text-stone-900">
+                  ¡Revocación Registrada con Éxito!
+                </h2>
+                <p className="text-xs text-stone-600 max-w-md mx-auto">
+                  Hemos generado tu comprobante legal oficial conforme a la Disp. 954/2025.
+                </p>
+              </div>
+
+              <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 max-w-md mx-auto flex items-center justify-between gap-3">
+                <div className="text-left">
+                  <span className="text-[10px] uppercase font-bold text-stone-500 block">Código Oficial:</span>
+                  <span className="font-mono font-extrabold text-xl text-rose-600">{codigoExito}</span>
+                </div>
+                <button
+                  onClick={() => handleCopiar(codigoExito)}
+                  className="px-3.5 py-2 bg-rose-600 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 hover:bg-rose-700 transition-colors"
+                >
+                  {copiado ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiado ? 'Copiado' : 'Copiar'}</span>
+                </button>
+              </div>
+
+              <div className="pt-2">
+                <Link
+                  to="/mis-pedidos"
+                  className="inline-flex items-center space-x-2 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold rounded-xl hover:bg-stone-800 transition-colors"
+                >
+                  <span>Ver en Mis Pedidos</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Listado de Pedidos Revocables del Usuario */}
+          <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600">
+                  <Package className="w-5 h-5" />
+                </div>
+                <div>
+                  <h2 className="font-display font-bold text-lg text-stone-900">
+                    Tus compras con derecho de revocación vigente
+                  </h2>
+                  <p className="text-xs text-stone-500">
+                    Pedidos realizados en los últimos 10 días corridos
+                  </p>
+                </div>
+              </div>
+              <Link
+                to="/mis-pedidos"
+                className="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center space-x-1"
+              >
+                <span>Ver historial completo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {cargandoPedidos ? (
+              <div className="py-8 text-center text-stone-500">
+                <Loader2 className="w-6 h-6 animate-spin mx-auto text-rose-500 mb-2" />
+                <span className="text-xs">Consultando tus pedidos...</span>
+              </div>
+            ) : pedidosRevocables.length === 0 ? (
+              <div className="p-8 text-center bg-stone-50/60 rounded-2xl border border-dashed border-stone-200 space-y-2">
+                <p className="text-sm font-semibold text-stone-700">
+                  No tenés pedidos activos dentro del plazo de 10 días para revocar
+                </p>
+                <p className="text-xs text-stone-500 max-w-md mx-auto">
+                  Todos tus pedidos están cancelados o superaron el plazo de 10 días corridos.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {pedidosRevocables.map((ped) => (
+                  <div
+                    key={ped.id}
+                    className="p-4 rounded-2xl bg-rose-50/40 border border-rose-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex items-center space-x-2">
+                        <span className="font-display font-bold text-stone-900 text-sm">
+                          Pedido #{ped.id}
+                        </span>
+                        <span className="text-xs text-stone-500">
+                          Total: <strong>${Number(ped.total).toLocaleString('es-AR')}</strong>
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-stone-500">
+                        Fecha: {new Date(ped.fecha_creacion).toLocaleDateString('es-AR', { dateStyle: 'long' })}
+                      </p>
+                    </div>
+
+                    <button
+                      onClick={() => handleRevocarDirecto(ped.id)}
+                      disabled={revocandoId === ped.id}
+                      className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm flex items-center justify-center space-x-1.5 transition-all self-start sm:self-auto disabled:opacity-50"
+                    >
+                      {revocandoId === ped.id ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Procesando...</span>
+                        </>
+                      ) : (
+                        <>
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>Revocar este pedido</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       ) : (
-        /* Formulario de Solicitud */
-        <div className="bg-white rounded-3xl border border-amber-100 p-6 sm:p-8 shadow-sm space-y-6">
-          <div className="space-y-1">
-            <h2 className="font-display font-bold text-lg text-stone-900">
-              Completá los datos para solicitar la revocación
-            </h2>
-            <p className="text-xs text-stone-500">
-              Se generará un número de identificación de trámite de forma automática e inmediata.
-            </p>
+        /* CASO B: USUARIO NO LOGUEADO */
+        <div className="space-y-6">
+          {/* Banner de Invitación al Login */}
+          <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="space-y-1 text-center sm:text-left">
+              <h2 className="font-display font-bold text-lg text-stone-900">
+                ¿Realizaste tu compra con una cuenta registrada?
+              </h2>
+              <p className="text-xs text-stone-500">
+                Iniciá sesión para revocar tu orden en 1 clic y obtener tu código oficial de inmediato.
+              </p>
+            </div>
+            <Link
+              to="/login"
+              state={{ from: '/arrepentimiento' }}
+              className="px-5 py-3 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex items-center space-x-2 transition-all shadow-md shrink-0"
+            >
+              <LogIn className="w-4 h-4 text-rose-400" />
+              <span>Iniciar Sesión para Revocar</span>
+            </Link>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="numeroPedido">
-                  Número de Pedido o Factura *
-                </label>
-                <input
-                  id="numeroPedido"
-                  type="text"
-                  name="numeroPedido"
-                  required
-                  placeholder="Ej: PED-1024 o N° 0001-000123"
-                  value={form.numeroPedido}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400/40"
-                />
+          {/* Formulario Manual Público */}
+          {tramiteManualGenerado ? (
+            <div
+              role="status"
+              className="bg-white rounded-3xl border-2 border-rose-400 p-8 shadow-warm space-y-5 text-center"
+            >
+              <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-10 h-10" />
+              </div>
+              <div className="space-y-1">
+                <h2 className="font-display font-bold text-2xl text-stone-900">
+                  Solicitud de Revocación Registrada
+                </h2>
+                <p className="text-xs text-stone-600 max-w-md mx-auto">
+                  Hemos generado tu número de identificación de trámite conforme a la Res. 424/2020.
+                </p>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="email">
-                  Correo Electrónico de la Compra *
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="correo@ejemplo.com"
-                  value={form.email}
-                  onChange={handleChange}
-                  className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400/40"
-                />
+              <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 max-w-md mx-auto space-y-1">
+                <span className="text-[11px] text-stone-500 uppercase font-bold block">Código de Trámite:</span>
+                <span className="font-mono font-extrabold text-2xl text-rose-600">{tramiteManualGenerado}</span>
+                <p className="text-[11px] text-stone-500">Guardá este código como comprobante legal.</p>
               </div>
-            </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="telefono">
-                Teléfono de Contacto (Opcional)
-              </label>
-              <input
-                id="telefono"
-                type="tel"
-                name="telefono"
-                placeholder="Ej: 11 2345 6789"
-                value={form.telefono}
-                onChange={handleChange}
-                className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400/40"
-              />
+              <p className="text-xs text-stone-600 max-w-lg mx-auto leading-relaxed">
+                Nos comunicaremos a <strong>{formManual.email}</strong> dentro de las 24 horas hábiles para coordinar el reintegro.
+              </p>
             </div>
+          ) : (
+            <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm space-y-4">
+              <div className="space-y-1">
+                <h2 className="font-display font-bold text-lg text-stone-900">
+                  Formulario de Solicitud de Arrepentimiento Manual
+                </h2>
+                <p className="text-xs text-stone-500">
+                  Completá los datos de tu compra para generar el código de trámite oficial.
+                </p>
+              </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="motivo">
-                Motivo o Detalle de la Revocación (Opcional)
-              </label>
-              <textarea
-                id="motivo"
-                name="motivo"
-                rows="3"
-                placeholder="Describí brevemente el motivo del arrepentimiento..."
-                value={form.motivo}
-                onChange={handleChange}
-                className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-400/40 resize-none"
-              ></textarea>
+              <form onSubmit={handleManualSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="numeroPedido">
+                      Número de Pedido *
+                    </label>
+                    <input
+                      id="numeroPedido"
+                      type="text"
+                      required
+                      placeholder="Ej: 104"
+                      value={formManual.numeroPedido}
+                      onChange={(e) => setFormManual({ ...formManual, numeroPedido: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="email">
+                      Correo Electrónico de la Compra *
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      required
+                      placeholder="nombre@ejemplo.com"
+                      value={formManual.email}
+                      onChange={(e) => setFormManual({ ...formManual, email: e.target.value })}
+                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="telefono">
+                    Teléfono de Contacto (Opcional)
+                  </label>
+                  <input
+                    id="telefono"
+                    type="tel"
+                    placeholder="Ej: 11 2345 6789"
+                    value={formManual.telefono}
+                    onChange={(e) => setFormManual({ ...formManual, telefono: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-stone-700 mb-1" htmlFor="motivo">
+                    Motivo o Comentarios (Opcional)
+                  </label>
+                  <textarea
+                    id="motivo"
+                    rows="3"
+                    placeholder="Detalle breve de la revocación..."
+                    value={formManual.motivo}
+                    onChange={(e) => setFormManual({ ...formManual, motivo: e.target.value })}
+                    className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
+                  ></textarea>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={enviandoManual}
+                  className="w-full py-3.5 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md shadow-rose-600/25 flex items-center justify-center space-x-2 transition-all"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>{enviandoManual ? 'Generando comprobante...' : 'Enviar Solicitud de Arrepentimiento'}</span>
+                </button>
+              </form>
             </div>
-
-            <div className="pt-2">
-              <button
-                type="submit"
-                disabled={enviando}
-                className="w-full py-3.5 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-semibold text-sm shadow-md shadow-rose-600/25 flex items-center justify-center space-x-2 transition-all"
-              >
-                <Send className="w-4 h-4" />
-                <span>{enviando ? 'Generando trámite...' : 'Enviar Solicitud de Arrepentimiento'}</span>
-              </button>
-            </div>
-
-          </form>
+          )}
         </div>
       )}
-
-    </div>
+    </motion.div>
   );
 }
