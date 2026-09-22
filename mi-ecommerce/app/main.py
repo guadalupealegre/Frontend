@@ -1,6 +1,9 @@
+import os
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
 
 from app.core.config import settings
 from app.db.database import Base, engine
@@ -12,11 +15,23 @@ import app.models.item_pedido
 import app.models.solicitud_revocacion
 from app.routers import auth_router, productos_router, pedidos_router, usuarios_router
 
+# Garantizar creación del directorio de subidas de archivos
+os.makedirs("uploads/productos", exist_ok=True)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Creación automática de todas las tablas en la base de datos al iniciar la app
     Base.metadata.create_all(bind=engine)
+
+    # Migración defensiva en SQLite para agregar la columna imagen_url si la tabla ya existía
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("ALTER TABLE productos ADD COLUMN imagen_url VARCHAR(255);"))
+            conn.commit()
+    except Exception:
+        pass  # La columna ya existe
+
     yield
 
 
@@ -30,8 +45,14 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Garantizar creación de tablas también a nivel de módulo
+# Garantizar creación de tablas a nivel de módulo
 Base.metadata.create_all(bind=engine)
+try:
+    with engine.connect() as conn:
+        conn.execute(text("ALTER TABLE productos ADD COLUMN imagen_url VARCHAR(255);"))
+        conn.commit()
+except Exception:
+    pass
 
 # Configuración de Middleware de CORS
 app.add_middleware(
@@ -41,6 +62,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Montar servidor de archivos estáticos para la carpeta uploads con el prefijo /static
+app.mount("/static", StaticFiles(directory="uploads"), name="static")
 
 # Inclusión de Routers
 app.include_router(auth_router)

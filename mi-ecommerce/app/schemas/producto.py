@@ -9,6 +9,7 @@ class ProductoBase(BaseModel):
     cuotas_valor: float = Field(..., gt=0, description="Monto exacto de cada cuota")
     garantia_meses: int = Field(default=0, ge=0, description="Garantía en meses (0 para productos perecederos)")
     stock: int = Field(default=0, ge=0, description="Stock disponible en unidades")
+    imagen_url: Optional[str] = Field(default=None, description="Ruta relativa de la imagen del producto")
 
 
 class ProductoCreate(ProductoBase):
@@ -22,6 +23,7 @@ class ProductoUpdate(BaseModel):
     cuotas_valor: Optional[float] = Field(None, gt=0)
     garantia_meses: Optional[int] = Field(None, ge=0)
     stock: Optional[int] = Field(None, ge=0)
+    imagen_url: Optional[str] = None
 
 
 class ProductoOut(ProductoBase):

@@ -64,27 +64,27 @@ export default function Login() {
       transition={{ duration: 0.3 }}
       className="max-w-md mx-auto py-8 px-4"
     >
-      <div className="bg-white rounded-3xl border border-rose-100 shadow-warm p-6 sm:p-10 space-y-6">
+      <div className="bg-white rounded-3xl border border-rose-200/80 shadow-warm p-8 space-y-6">
         
         {/* Cabecera */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-600 to-amber-500 text-white flex items-center justify-center mx-auto shadow-md shadow-rose-600/20">
-            <Cake className="w-6 h-6" />
+          <div className="w-14 h-14 rounded-full bg-[#E85D88] text-white flex items-center justify-center mx-auto shadow-md shadow-rose-500/30">
+            <Cake className="w-7 h-7" />
           </div>
-          <h1 className="font-display font-bold text-2xl sm:text-3xl text-stone-900">
+          <h1 className="font-serif font-bold text-3xl text-[#3B111E]">
             Bienvenido a Dulce Vicio
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500">
+          <p className="text-xs text-stone-500">
             Ingresá a tu cuenta para continuar con tus pedidos
           </p>
         </div>
 
         {/* Mensaje de Error */}
         {error && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-2xl flex items-start space-x-3 text-sm">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+          <div className="bg-rose-50 border border-rose-200 text-rose-900 p-4 rounded-2xl flex items-start space-x-3 text-sm">
+            <AlertCircle className="w-5 h-5 text-[#E85D88] shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold">Error de autenticación</p>
+              <p className="font-semibold text-xs">Error de autenticación</p>
               <p className="text-xs text-rose-700">{error}</p>
             </div>
           </div>
@@ -107,7 +107,7 @@ export default function Login() {
                 placeholder="nombre@ejemplo.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
               />
             </div>
           </div>
@@ -126,7 +126,7 @@ export default function Login() {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
               />
             </div>
           </div>
@@ -135,7 +135,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={cargando}
-            className="w-full py-3.5 px-4 rounded-2xl font-semibold text-sm bg-gradient-to-r from-rose-500 via-rose-600 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white shadow-rose-500/25 hover:shadow-lg transition-all flex items-center justify-center space-x-2 disabled:opacity-60"
+            className="w-full py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider bg-[#3B111E] hover:bg-[#E85D88] text-white shadow-md transition-all flex items-center justify-center space-x-2 disabled:opacity-60"
           >
             {cargando ? (
               <>
@@ -152,23 +152,23 @@ export default function Login() {
         </form>
 
         {/* Accesos directos de prueba */}
-        <div className="pt-2 border-t border-stone-100 space-y-2">
-          <p className="text-[11px] font-semibold text-stone-400 text-center uppercase tracking-wider">
+        <div className="pt-2 border-t border-rose-100 space-y-2">
+          <p className="text-[10px] font-semibold text-stone-400 text-center uppercase tracking-wider">
             Credenciales de prueba rápida
           </p>
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => cargarCredenciales('admin')}
-              className="px-2.5 py-1.5 text-xs bg-rose-50 text-rose-900 border border-rose-200 rounded-xl hover:bg-rose-100 flex items-center justify-center space-x-1 transition-colors"
+              className="px-3 py-2 text-xs bg-[#FFF1F5] text-[#3B111E] border border-rose-200 rounded-xl hover:bg-rose-100 flex items-center justify-center space-x-1 font-semibold transition-colors"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-rose-700" />
+              <ShieldCheck className="w-3.5 h-3.5 text-[#E85D88]" />
               <span>Admin Demo</span>
             </button>
             <button
               type="button"
               onClick={() => cargarCredenciales('cliente')}
-              className="px-2.5 py-1.5 text-xs bg-stone-50 text-stone-800 border border-stone-200 rounded-xl hover:bg-stone-100 flex items-center justify-center space-x-1 transition-colors"
+              className="px-3 py-2 text-xs bg-[#FAF8F5] text-stone-800 border border-stone-200 rounded-xl hover:bg-stone-100 flex items-center justify-center space-x-1 font-semibold transition-colors"
             >
               <UserCheck className="w-3.5 h-3.5 text-stone-600" />
               <span>Cliente Demo</span>
@@ -179,7 +179,7 @@ export default function Login() {
         {/* Footer */}
         <div className="text-center pt-2 text-xs text-stone-500">
           ¿Aún no tenés cuenta?{' '}
-          <Link to="/registro" className="font-semibold text-rose-600 hover:text-rose-700 hover:underline">
+          <Link to="/registro" className="font-bold text-[#E85D88] hover:underline">
             Registrate ahora
           </Link>
         </div>

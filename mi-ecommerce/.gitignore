@@ -24,3 +24,7 @@ alembic/versions/*.pyc
 .vscode/
 .idea/
 .DS_Store
+
+# Uploaded Files
+uploads/
+

@@ -12,6 +12,7 @@ class Producto(Base):
     cuotas_valor = Column(Float, nullable=False)
     garantia_meses = Column(Integer, nullable=False, default=0)
     stock = Column(Integer, nullable=False, default=0)
+    imagen_url = Column(String(255), nullable=True)
 
     def __repr__(self) -> str:
-        return f"<Producto(id={self.id}, nombre='{self.nombre}', precio_final={self.precio_final}, stock={self.stock})>"
+        return f"<Producto(id={self.id}, nombre='{self.nombre}', precio_final={self.precio_final}, stock={self.stock}, imagen_url='{self.imagen_url}')>"

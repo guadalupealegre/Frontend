@@ -78,39 +78,39 @@ export default function Registro() {
       transition={{ duration: 0.3 }}
       className="max-w-xl mx-auto py-8 px-4"
     >
-      <div className="bg-white rounded-3xl border border-rose-100 shadow-warm p-6 sm:p-10 space-y-6">
+      <div className="bg-white rounded-3xl border border-rose-200/80 shadow-warm p-8 space-y-6">
         
         {/* Cabecera */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-600 flex items-center justify-center mx-auto">
-            <UserPlus className="w-6 h-6" />
+          <div className="w-14 h-14 rounded-full bg-[#FFF1F5] border border-rose-200 text-[#E85D88] flex items-center justify-center mx-auto">
+            <UserPlus className="w-7 h-7" />
           </div>
-          <h1 className="font-display font-bold text-2xl sm:text-3xl text-stone-900">
+          <h1 className="font-serif font-bold text-3xl text-[#3B111E]">
             Creá tu cuenta en Dulce Vicio
           </h1>
-          <p className="text-xs sm:text-sm text-stone-500">
+          <p className="text-xs text-stone-500">
             Registrate para gestionar tus pedidos y disfrutar de nuestras especialidades
           </p>
         </div>
 
         {/* Mensaje de Éxito */}
         {exito && (
-          <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl flex items-center space-x-3 text-sm">
+          <div className="bg-emerald-50 border border-emerald-200 text-emerald-900 p-4 rounded-2xl flex items-center space-x-3 text-xs font-semibold">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             <div>
-              <p className="font-semibold">¡Cuenta creada con éxito!</p>
-              <p className="text-xs text-emerald-700">Redirigiendo a la pantalla de inicio de sesión...</p>
+              <p className="font-bold text-sm">¡Cuenta creada con éxito!</p>
+              <p className="text-emerald-700">Redirigiendo a la pantalla de inicio de sesión...</p>
             </div>
           </div>
         )}
 
         {/* Mensaje de Error */}
         {error && (
-          <div className="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-2xl flex items-start space-x-3 text-sm">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+          <div className="bg-rose-50 border border-rose-200 text-rose-900 p-4 rounded-2xl flex items-start space-x-3 text-xs font-medium">
+            <AlertCircle className="w-5 h-5 text-[#E85D88] shrink-0 mt-0.5" />
             <div>
-              <p className="font-semibold">No pudimos completar el registro</p>
-              <p className="text-xs text-rose-700">{error}</p>
+              <p className="font-bold text-sm text-rose-950">No pudimos completar el registro</p>
+              <p className="text-rose-700">{error}</p>
             </div>
           </div>
         )}
@@ -133,7 +133,7 @@ export default function Registro() {
                 placeholder="Ej: Lucía Gómez"
                 value={form.nombre}
                 onChange={cambiar}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
               />
             </div>
           </div>
@@ -153,7 +153,7 @@ export default function Registro() {
                 placeholder="nombre@ejemplo.com"
                 value={form.email}
                 onChange={cambiar}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
               />
             </div>
           </div>
@@ -173,14 +173,14 @@ export default function Registro() {
                 placeholder="••••••••"
                 value={form.password}
                 onChange={cambiar}
-                className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
+                className="w-full pl-10 pr-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
               />
             </div>
           </div>
 
           {/* Checkbox Obligatorio de Protección de Datos Personales (Ley 25.326) */}
           <div className="pt-2">
-            <div className="p-4 rounded-2xl bg-rose-50/70 border border-rose-200/80 space-y-3">
+            <div className="p-4 rounded-2xl bg-[#FFF1F5] border border-rose-200 space-y-3">
               <div className="flex items-start space-x-3">
                 <input
                   id="acepto_tratamiento"
@@ -188,21 +188,21 @@ export default function Registro() {
                   type="checkbox"
                   checked={form.acepto_tratamiento}
                   onChange={cambiar}
-                  className="mt-1 w-4 h-4 text-rose-600 rounded border-stone-300 focus:ring-rose-500 cursor-pointer"
+                  className="mt-1 w-4 h-4 text-[#E85D88] rounded border-stone-300 focus:ring-[#E85D88] cursor-pointer"
                 />
                 <label
                   htmlFor="acepto_tratamiento"
                   className="text-xs text-stone-700 leading-relaxed cursor-pointer select-none"
                 >
-                  <strong className="text-rose-950 block font-semibold mb-0.5">
+                  <strong className="text-[#3B111E] block font-bold mb-0.5">
                     Consentimiento Legal de Datos Personales (Ley N° 25.326):
                   </strong>
                   Acepto expresamente que mis datos sean tratados por Dulce Vicio con fines de gestión comercial y entrega de pedidos. Declaro conocer mis derechos de acceso, actualización y supresión conforme a la ley.
                 </label>
               </div>
 
-              <div className="flex items-center space-x-1.5 text-[11px] text-rose-900/80 pl-7">
-                <ShieldCheck className="w-3.5 h-3.5 text-rose-600 shrink-0" />
+              <div className="flex items-center space-x-1.5 text-[11px] text-stone-600 pl-7">
+                <ShieldCheck className="w-3.5 h-3.5 text-[#E85D88] shrink-0" />
                 <span>Tu consentimiento quedará registrado con fecha y hora segura.</span>
               </div>
             </div>
@@ -212,10 +212,10 @@ export default function Registro() {
           <button
             type="submit"
             disabled={!form.acepto_tratamiento || cargando}
-            className={`w-full py-3.5 px-4 rounded-2xl font-semibold text-sm flex items-center justify-center space-x-2 transition-all duration-200 shadow-md ${
+            className={`w-full py-4 px-4 rounded-2xl font-bold text-xs uppercase tracking-wider flex items-center justify-center space-x-2 transition-all duration-200 shadow-md ${
               !form.acepto_tratamiento || cargando
                 ? 'bg-stone-200 text-stone-400 cursor-not-allowed border border-stone-300'
-                : 'bg-gradient-to-r from-rose-500 via-rose-600 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white shadow-rose-500/25 hover:shadow-lg'
+                : 'bg-[#3B111E] hover:bg-[#E85D88] text-white'
             }`}
           >
             {cargando ? (
@@ -235,7 +235,7 @@ export default function Registro() {
         {/* Footer del Formulario */}
         <div className="text-center pt-2 border-t border-stone-100 text-xs text-stone-500">
           ¿Ya tenés una cuenta?{' '}
-          <Link to="/login" className="font-semibold text-rose-600 hover:text-rose-700 hover:underline">
+          <Link to="/login" className="font-bold text-[#E85D88] hover:underline">
             Iniciá sesión aquí
           </Link>
         </div>

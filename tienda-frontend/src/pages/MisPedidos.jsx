@@ -163,17 +163,15 @@ export default function MisPedidos() {
     setTimeout(() => setCopiado(false), 2000);
   };
 
-  // ==========================================
-  // ESTADO 1: CARGANDO
-  // ==========================================
+  // ESTADO CARGANDO
   if (cargando && pedidos.length === 0) {
     return (
       <div className="min-h-[50vh] flex flex-col items-center justify-center space-y-4">
-        <div className="w-16 h-16 rounded-3xl bg-rose-100 flex items-center justify-center animate-pulse">
-          <Cake className="w-9 h-9 text-rose-600 animate-bounce" />
+        <div className="w-16 h-16 rounded-full bg-[#FFF1F5] flex items-center justify-center animate-pulse">
+          <Cake className="w-9 h-9 text-[#E85D88] animate-bounce" />
         </div>
         <div className="text-center space-y-1">
-          <h2 className="font-display font-bold text-lg text-stone-900">
+          <h2 className="font-serif font-bold text-xl text-[#3B111E]">
             Consultando tu historial de compras...
           </h2>
           <p className="text-xs text-stone-500">Recuperando pedidos en Dulce Vicio</p>
@@ -182,24 +180,22 @@ export default function MisPedidos() {
     );
   }
 
-  // ==========================================
-  // ESTADO 2: ERROR
-  // ==========================================
+  // ESTADO ERROR
   if (error) {
     return (
-      <div className="max-w-2xl mx-auto my-8 p-6 sm:p-8 bg-rose-50 border border-rose-200 rounded-3xl text-center space-y-4">
-        <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-100 flex items-center justify-center text-rose-600">
+      <div className="max-w-2xl mx-auto my-8 p-8 bg-rose-50 border border-rose-200 rounded-3xl text-center space-y-4">
+        <div className="w-14 h-14 mx-auto rounded-2xl bg-rose-100 flex items-center justify-center text-[#E85D88]">
           <AlertCircle className="w-8 h-8" />
         </div>
         <div className="space-y-1">
-          <h2 className="font-display font-bold text-lg text-rose-950">
+          <h2 className="font-serif font-bold text-xl text-rose-950">
             No pudimos cargar tus pedidos
           </h2>
           <p className="text-xs text-rose-700 max-w-md mx-auto">{error}</p>
         </div>
         <button
           onClick={cargarHistorial}
-          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-700 transition-colors shadow-sm"
+          className="inline-flex items-center space-x-2 px-6 py-3 bg-[#3B111E] text-white rounded-xl text-xs font-bold hover:bg-[#E85D88] transition-colors shadow-sm"
         >
           <RefreshCw className="w-4 h-4" />
           <span>Reintentar</span>
@@ -208,27 +204,25 @@ export default function MisPedidos() {
     );
   }
 
-  // ==========================================
-  // ESTADO 3: LISTA VACÍA
-  // ==========================================
+  // ESTADO LISTA VACÍA
   if (pedidos.length === 0) {
     return (
-      <div className="max-w-2xl mx-auto my-8 p-8 sm:p-12 bg-white border border-rose-100 rounded-3xl text-center space-y-6 shadow-warm">
-        <div className="w-20 h-20 mx-auto rounded-3xl bg-rose-50 border-2 border-rose-200/80 flex items-center justify-center text-4xl shadow-inner">
+      <div className="max-w-2xl mx-auto my-8 p-12 bg-white border border-rose-200/80 rounded-3xl text-center space-y-6 shadow-warm">
+        <div className="w-20 h-20 mx-auto rounded-full bg-[#FFF1F5] border-2 border-rose-200 flex items-center justify-center text-4xl shadow-inner">
           🍰
         </div>
         <div className="space-y-2">
-          <h2 className="font-display font-bold text-2xl text-stone-900">
+          <h2 className="font-serif font-bold text-2xl text-[#3B111E]">
             Aún no realizaste ningún pedido
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 max-w-md mx-auto">
-            ¡Descubrí la carta de postres recién horneados y hacé tu primer pedido artesanal hoy mismo!
+            ¡Descubrí nuestra carta de postres recién horneados y hacé tu primer pedido artesanal hoy mismo!
           </p>
         </div>
         <div className="pt-2">
           <Link
             to="/"
-            className="inline-flex items-center space-x-2 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white font-bold text-sm shadow-md shadow-rose-500/20 transition-all active:scale-95"
+            className="inline-flex items-center space-x-2 px-8 py-3.5 rounded-full bg-[#3B111E] hover:bg-[#E85D88] text-white font-bold text-xs uppercase tracking-widest shadow-md transition-all active:scale-95"
           >
             <ShoppingBag className="w-4 h-4" />
             <span>Ver Catálogo de Postres</span>
@@ -245,24 +239,24 @@ export default function MisPedidos() {
       transition={{ duration: 0.35 }}
       className="max-w-4xl mx-auto space-y-8 py-4 px-2 sm:px-4"
     >
-      {/* Banner de Bienvenida y Resumen */}
-      <div className="bg-gradient-to-r from-[#28130a] via-[#3a1d12] to-[#200f07] text-amber-50 p-6 sm:p-8 rounded-3xl shadow-warm border border-amber-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+      {/* Banner Header */}
+      <div className="bg-[#3B111E] text-[#FAF8F5] p-8 rounded-3xl shadow-xl border border-rose-900/40 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1 text-center sm:text-left">
-          <div className="inline-flex items-center space-x-1.5 bg-rose-500/20 px-3 py-1 rounded-full text-xs font-semibold text-rose-300 border border-rose-400/30">
-            <Sparkles className="w-3 h-3 text-rose-400" />
+          <div className="inline-flex items-center space-x-1.5 bg-[#E85D88]/20 px-3.5 py-1 rounded-full text-xs font-bold text-[#E85D88] border border-[#E85D88]/30">
+            <Sparkles className="w-3.5 h-3.5 text-[#E85D88]" />
             <span>Compras Confirmadas</span>
           </div>
-          <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
+          <h1 className="font-serif font-bold text-3xl sm:text-4xl text-white">
             Historial de Mis Pedidos
           </h1>
-          <p className="text-xs text-amber-200/80">
+          <p className="text-xs text-rose-100/80">
             Hola <span className="font-semibold text-white">{usuario?.nombre}</span>, aquí tenés el registro de todos tus pedidos en Dulce Vicio.
           </p>
         </div>
 
-        <div className="bg-black/30 backdrop-blur-md px-5 py-3.5 rounded-2xl border border-white/10 text-center">
-          <span className="block text-2xl font-extrabold text-rose-300">{pedidos.length}</span>
-          <span className="text-[10px] uppercase font-bold text-amber-200/80 tracking-wider">
+        <div className="bg-[#4A1525] px-6 py-4 rounded-2xl border border-rose-800/50 text-center shrink-0">
+          <span className="block text-3xl font-extrabold text-[#E85D88]">{pedidos.length}</span>
+          <span className="text-[10px] uppercase font-bold text-rose-200 tracking-wider">
             {pedidos.length === 1 ? 'Pedido Registrado' : 'Pedidos Registrados'}
           </span>
         </div>
@@ -270,7 +264,7 @@ export default function MisPedidos() {
 
       {/* Alerta de nuevo pedido recién creado */}
       {nuevoPedidoId && (
-        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center space-x-3 shadow-xs">
+        <div className="p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-950 flex items-center space-x-3 shadow-sm">
           <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
           <p className="text-xs sm:text-sm font-medium">
             ¡Felicitaciones! Tu orden <strong>#{nuevoPedidoId}</strong> fue registrada y se encuentra en estado de preparación.
@@ -287,18 +281,18 @@ export default function MisPedidos() {
             exit={{ opacity: 0, scale: 0.95 }}
             role="status"
             aria-live="polite"
-            className="p-6 rounded-3xl bg-rose-50 border-2 border-rose-400 text-rose-950 shadow-lg space-y-4"
+            className="p-6 sm:p-8 rounded-3xl bg-[#FFF1F5] border-2 border-[#E85D88] text-rose-950 shadow-xl space-y-4"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center space-x-3">
-                <div className="p-3 bg-rose-600 text-white rounded-2xl shadow-sm">
+                <div className="p-3 bg.E85D88 bg-[#E85D88] text-white rounded-2xl shadow-sm">
                   <RotateCcw className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-display font-bold text-lg text-rose-950">
+                  <h3 className="font-serif font-bold text-xl text-[#3B111E]">
                     ¡Solicitud de Revocación Registrada con Éxito!
                   </h3>
-                  <p className="text-xs text-rose-800">
+                  <p className="text-xs text-rose-900">
                     Conforme a la Ley N° 24.240 Art. 34 y la Disp. 954/2025 para el pedido #{comprobanteRevocacion.pedidoId}
                   </p>
                 </div>
@@ -318,14 +312,14 @@ export default function MisPedidos() {
                 <span className="text-[11px] text-stone-500 uppercase tracking-wider font-semibold block">
                   Código Único de Identificación de Trámite:
                 </span>
-                <span className="font-mono font-extrabold text-2xl text-rose-600 tracking-wider">
+                <span className="font-mono font-extrabold text-2xl text-[#E85D88] tracking-wider">
                   {comprobanteRevocacion.codigo}
                 </span>
               </div>
 
               <button
                 onClick={() => handleCopiarCodigo(comprobanteRevocacion.codigo)}
-                className="px-4 py-2.5 bg-rose-100 hover:bg-rose-200 text-rose-800 rounded-xl text-xs font-bold flex items-center space-x-2 transition-colors shrink-0"
+                className="px-5 py-2.5 bg-[#FFF1F5] hover:bg-rose-100 text-[#3B111E] border border-rose-200 rounded-xl text-xs font-bold flex items-center space-x-2 transition-colors shrink-0"
               >
                 {copiado ? (
                   <>
@@ -334,14 +328,14 @@ export default function MisPedidos() {
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" />
+                    <Copy className="w-4 h-4 text-[#E85D88]" />
                     <span>Copiar Código</span>
                   </>
                 )}
               </button>
             </div>
 
-            <p className="text-xs text-rose-900/80 leading-relaxed">
+            <p className="text-xs text-stone-700 leading-relaxed">
               Guardá este código como constancia legal de tu solicitud. El stock fue reincorporado a nuestro inventario y el reembolso correspondiente será procesado por el mismo medio de pago utilizado.
             </p>
           </motion.div>
@@ -370,26 +364,26 @@ export default function MisPedidos() {
           return (
             <div
               key={pedido.id}
-              className="bg-white rounded-3xl border border-rose-100 shadow-sm overflow-hidden transition-all hover:shadow-md"
+              className="bg-white rounded-3xl border border-rose-200/80 shadow-sm overflow-hidden transition-all hover:shadow-md"
             >
-              {/* Encabezado del Acordeón (Clickable) */}
+              {/* Encabezado del Acordeón */}
               <button
                 onClick={() => toggleExpandido(pedido.id)}
-                className="w-full p-5 sm:p-6 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white hover:bg-rose-50/30 transition-colors"
+                className="w-full p-6 text-left flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white hover:bg-[#FAF0F3]/40 transition-colors"
                 aria-expanded={abierto}
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200/80 flex items-center justify-center text-rose-700 font-bold shrink-0">
-                    <Receipt className="w-6 h-6 text-rose-600" />
+                  <div className="w-12 h-12 rounded-2xl bg-[#FFF1F5] border border-rose-200 flex items-center justify-center text-[#E85D88] shrink-0">
+                    <Receipt className="w-6 h-6 text-[#E85D88]" />
                   </div>
 
                   <div className="space-y-1">
                     <div className="flex items-center space-x-2">
-                      <span className="font-display font-extrabold text-lg text-stone-900">
+                      <span className="font-serif font-bold text-xl text-[#3B111E]">
                         Pedido #{pedido.id}
                       </span>
                       {nuevoPedidoId === pedido.id && (
-                        <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-600 text-white">
+                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-600 text-white">
                           ¡Nuevo!
                         </span>
                       )}
@@ -413,7 +407,7 @@ export default function MisPedidos() {
                   {/* Total */}
                   <div className="text-right">
                     <span className="text-[10px] text-stone-400 block uppercase font-bold">Total</span>
-                    <span className="font-display font-extrabold text-xl text-stone-900">
+                    <span className="font-serif font-extrabold text-xl text-[#3B111E]">
                       ${Number(pedido.total).toLocaleString('es-AR')}
                     </span>
                   </div>
@@ -424,9 +418,9 @@ export default function MisPedidos() {
                 </div>
               </button>
 
-              {/* Cuerpo del Acordeón: Detalle de Ítems Congelados */}
+              {/* Cuerpo del Acordeón */}
               {abierto && (
-                <div className="px-5 pb-6 pt-2 sm:px-6 border-t border-stone-100 bg-stone-50/40 space-y-4">
+                <div className="px-6 pb-6 pt-2 border-t border-stone-100 bg-[#FAF8F5]/60 space-y-4">
                   <h4 className="text-xs font-bold text-stone-500 uppercase tracking-wider">
                     Desglose de Productos Adquiridos
                   </h4>
@@ -441,12 +435,12 @@ export default function MisPedidos() {
                       return (
                         <div
                           key={item.id}
-                          className="bg-white rounded-2xl p-3.5 border border-stone-200/80 flex items-center justify-between shadow-xs"
+                          className="bg-white rounded-2xl p-4 border border-rose-200/60 flex items-center justify-between shadow-xs"
                         >
                           <div className="flex items-center space-x-3">
                             <span className="text-2xl">{emoji}</span>
                             <div>
-                              <span className="font-semibold text-sm text-stone-900 block">
+                              <span className="font-serif font-bold text-sm text-[#3B111E] block">
                                 {nombreProd}
                               </span>
                               <span className="text-xs text-stone-500">
@@ -455,7 +449,7 @@ export default function MisPedidos() {
                             </div>
                           </div>
 
-                          <span className="font-display font-bold text-sm sm:text-base text-stone-900">
+                          <span className="font-serif font-bold text-base text-[#3B111E]">
                             ${subtotalItem.toLocaleString('es-AR')}
                           </span>
                         </div>
@@ -463,8 +457,8 @@ export default function MisPedidos() {
                     })}
                   </div>
 
-                  {/* Acciones del Pedido & Botón de Arrepentimiento */}
-                  <div className="pt-3 border-t border-stone-200/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                  {/* Acciones y Botón de Arrepentimiento */}
+                  <div className="pt-3 border-t border-stone-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
                     <div className="flex items-center space-x-1.5 text-stone-500">
                       <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
                       <span>Transacción protegida por la Ley 24.240.</span>
@@ -475,9 +469,9 @@ export default function MisPedidos() {
                       <button
                         onClick={() => setPedidoARevocar(pedido)}
                         disabled={enviandoRevocacion}
-                        className="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md shadow-rose-600/25 flex items-center space-x-1.5 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
+                        className="px-5 py-2.5 rounded-xl bg-[#E85D88] hover:bg-[#D81B60] text-white font-bold text-xs shadow-md shadow-[#E85D88]/20 flex items-center space-x-1.5 transition-all hover:scale-105 active:scale-95 disabled:opacity-50"
                       >
-                        <RotateCcw className="w-3.5 h-3.5" />
+                        <RotateCcw className="w-4 h-4" />
                         <span>Arrepentirme de esta compra</span>
                       </button>
                     ) : pedido.estado.toLowerCase() === 'cancelado' ? (
@@ -500,18 +494,18 @@ export default function MisPedidos() {
       {/* Modal de Confirmación de Revocación */}
       <AnimatePresence>
         {pedidoARevocar && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#3B111E]/70 backdrop-blur-sm">
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl border border-rose-200 shadow-2xl max-w-lg w-full p-6 sm:p-8 space-y-6"
+              className="bg-white rounded-3xl border border-rose-200 shadow-2xl max-w-lg w-full p-8 space-y-6"
             >
               <div className="text-center space-y-3">
-                <div className="w-14 h-14 mx-auto rounded-3xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto rounded-full bg-[#FFF1F5] text-[#E85D88] flex items-center justify-center border border-rose-200">
                   <RotateCcw className="w-8 h-8" />
                 </div>
-                <h3 className="font-display font-bold text-xl text-stone-900">
+                <h3 className="font-serif font-bold text-2xl text-[#3B111E]">
                   ¿Deseás revocar el Pedido #{pedidoARevocar.id}?
                 </h3>
                 <p className="text-xs text-stone-600 leading-relaxed">
@@ -519,12 +513,12 @@ export default function MisPedidos() {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 space-y-2 text-xs text-rose-950">
-                <p className="font-bold">Efectos de la revocación:</p>
-                <ul className="list-disc list-inside space-y-1 text-rose-900/90">
+              <div className="p-4 rounded-2xl bg-[#FFF1F5] border border-rose-200 space-y-2 text-xs text-[#3B111E]">
+                <p className="font-bold">Efectos legales de la revocación:</p>
+                <ul className="list-disc list-inside space-y-1 text-stone-700">
                   <li>El pedido quedará cancelado de forma inmediata.</li>
                   <li>Las unidades compradas volverán a sumarse al stock de la tienda.</li>
-                  <li>Se generará un <strong>código único ARR-YYYYMMDD-XXXXXX</strong> como constancia legal.</li>
+                  <li>Se generará un <strong>código único ARR-YYYYMMDD-XXXXXX</strong> como comprobante oficial.</li>
                 </ul>
               </div>
 
@@ -533,7 +527,7 @@ export default function MisPedidos() {
                   type="button"
                   onClick={() => setPedidoARevocar(null)}
                   disabled={enviandoRevocacion}
-                  className="py-3 px-4 rounded-xl border border-stone-300 text-xs font-semibold text-stone-700 hover:bg-stone-50 transition-colors"
+                  className="py-3 px-4 rounded-xl border border-stone-300 text-xs font-bold text-stone-700 hover:bg-stone-50 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -541,7 +535,7 @@ export default function MisPedidos() {
                   type="button"
                   onClick={handleEjecutarRevocacion}
                   disabled={enviandoRevocacion}
-                  className="py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold shadow-md shadow-rose-600/30 flex items-center justify-center space-x-1.5 transition-all disabled:opacity-60"
+                  className="py-3 px-4 rounded-xl bg-[#E85D88] hover:bg-[#D81B60] text-white text-xs font-bold shadow-md flex items-center justify-center space-x-1.5 transition-all disabled:opacity-60"
                 >
                   {enviandoRevocacion ? (
                     <>

@@ -4,25 +4,30 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { useCarrito } from '../context/CarritoContext';
 import {
-  Cake,
+  Phone,
+  Instagram,
+  Facebook,
+  MessageCircle,
+  Search,
   ShoppingBag,
   Package,
-  User,
   ShieldCheck,
+  RotateCcw,
   LogOut,
   LogIn,
   UserPlus,
-  RotateCcw,
   Menu,
   X,
-  Sparkles,
-  FileText,
+  User,
+  Cake,
+  ChevronDown,
 } from 'lucide-react';
 
 export default function Navbar() {
   const { usuario, cerrarSesion, esAdmin } = useAuth();
-  const { cantidadTotal, abrirDrawer } = useCarrito();
+  const { cantidadTotal, total, abrirDrawer } = useCarrito();
   const [menuAbierto, setMenuAbierto] = useState(false);
+  const [busquedaLocal, setBusquedaLocal] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -32,240 +37,312 @@ export default function Navbar() {
     setMenuAbierto(false);
   };
 
-  const linkActivo = (path) => location.pathname === path;
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (location.pathname !== '/') {
+      navigate('/');
+    }
+    const el = document.getElementById('seccion-catalogo');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const esLinkActivo = (path) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-40 bg-[#24120b]/95 backdrop-blur-md border-b border-rose-950/60 text-amber-50 shadow-md">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+    <header className="sticky top-0 z-40 w-full shadow-md">
+      {/* 1. TOP BAR (Fondo Borravino #3B111E) */}
+      <div className="bg-[#3B111E] text-[#FAF8F5] text-xs py-2 px-4 sm:px-6 border-b border-rose-900/40">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
           
-          {/* Logo & Marca Dulce Vicio */}
-          <Link
-            to="/"
-            className="flex items-center space-x-3 group transition-transform duration-200 hover:scale-[1.02]"
-          >
-            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-rose-500 via-rose-600 to-amber-500 flex items-center justify-center shadow-lg shadow-rose-600/30 group-hover:rotate-6 transition-transform">
-              <Cake className="w-6 h-6 text-white" />
+          {/* Teléfono & Redes Sociales */}
+          <div className="flex items-center space-x-6 text-[#FAF8F5]/90">
+            <a
+              href="tel:+541145678900"
+              className="flex items-center space-x-2 hover:text-[#E85D88] transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#E85D88]" />
+              <span className="font-medium">+54 11 4567-8900</span>
+            </a>
+            <span className="hidden sm:inline text-rose-900/60">|</span>
+            <div className="hidden sm:flex items-center space-x-3 text-rose-200/80">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram Dulce Vicio"
+                className="hover:text-[#E85D88] transition-colors"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook Dulce Vicio"
+                className="hover:text-[#E85D88] transition-colors"
+              >
+                <Facebook className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://wa.me/541145678900"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="WhatsApp Dulce Vicio"
+                className="hover:text-[#E85D88] transition-colors"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+              </a>
             </div>
-            <div>
-              <span className="font-display font-bold text-2xl tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-rose-200 via-amber-200 to-rose-100">
-                Dulce Vicio
-              </span>
-              <span className="block text-[10px] uppercase tracking-widest text-rose-300/80 font-medium">
-                Repostería Artesanal
-              </span>
-            </div>
-          </Link>
-
-          {/* Enlaces de Navegación de Escritorio */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
-            <Link
-              to="/"
-              className={`px-3.5 py-2 rounded-xl text-sm font-medium transition-all ${
-                linkActivo('/')
-                  ? 'bg-rose-500/20 text-rose-200 border border-rose-500/30'
-                  : 'text-amber-100/80 hover:text-white hover:bg-stone-800/40'
-              }`}
-            >
-              Catálogo
-            </Link>
-
-            {/* Enlace a Mis Pedidos (si está autenticado) */}
-            {usuario && (
-              <Link
-                to="/mis-pedidos"
-                className={`px-3.5 py-2 rounded-xl text-sm font-medium flex items-center space-x-1.5 transition-all ${
-                  linkActivo('/mis-pedidos')
-                    ? 'bg-rose-500/20 text-rose-200 border border-rose-500/30'
-                    : 'text-amber-100/80 hover:text-white hover:bg-stone-800/40'
-                }`}
-              >
-                <Package className="w-4 h-4 text-rose-400" />
-                <span>Mis Pedidos</span>
-              </Link>
-            )}
-
-            {/* Enlace a Mis Datos & Portabilidad (si está autenticado) */}
-            {usuario && (
-              <Link
-                to="/mis-datos"
-                className={`px-3.5 py-2 rounded-xl text-sm font-medium flex items-center space-x-1.5 transition-all ${
-                  linkActivo('/mis-datos')
-                    ? 'bg-rose-500/20 text-rose-200 border border-rose-500/30'
-                    : 'text-amber-100/80 hover:text-white hover:bg-stone-800/40'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Mis Datos</span>
-              </Link>
-            )}
-
-            {/* Enlace destacado de Botón de Arrepentimiento (Res. 424/2020) */}
-            <Link
-              to="/arrepentimiento"
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 border transition-all ${
-                linkActivo('/arrepentimiento')
-                  ? 'bg-rose-600/30 border-rose-400 text-rose-100 shadow-sm'
-                  : 'border-rose-500/40 text-rose-300 bg-rose-950/40 hover:bg-rose-900/50'
-              }`}
-              title="Resolución 424/2020 - Revocación de compra"
-            >
-              <RotateCcw className="w-3.5 h-3.5 text-rose-400" />
-              <span>Botón de Arrepentimiento</span>
-            </Link>
-
-            {esAdmin && (
-              <Link
-                to="/admin"
-                className={`px-3.5 py-2 rounded-xl text-sm font-semibold flex items-center space-x-1.5 transition-all ${
-                  linkActivo('/admin')
-                    ? 'bg-amber-500 text-stone-900 shadow-md shadow-amber-500/30'
-                    : 'bg-amber-950/70 text-amber-200 hover:bg-amber-900/80 border border-amber-700/50'
-                }`}
-              >
-                <ShieldCheck className="w-4 h-4 text-amber-300" />
-                <span>Panel Admin</span>
-              </Link>
-            )}
-          </nav>
-
-          {/* Sección Derecha: Carrito + Usuario */}
-          <div className="hidden md:flex items-center space-x-4">
-            
-            {/* Botón Carrito con Badge Contador Animado */}
-            <button
-              onClick={abrirDrawer}
-              className="relative p-2.5 rounded-2xl bg-stone-900/80 border border-stone-800 text-amber-200 hover:text-white hover:bg-stone-800 transition-all duration-200 shadow-sm flex items-center space-x-2 group active:scale-95"
-              aria-label="Abrir carrito de compras"
-              title="Ver mi carrito"
-            >
-              <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform text-rose-400" />
-              
-              {cantidadTotal > 0 && (
-                <span
-                  key={cantidadTotal}
-                  className="absolute -top-1.5 -right-1.5 bg-gradient-to-r from-rose-500 to-amber-500 text-white font-extrabold text-[11px] min-w-[22px] h-[22px] px-1 rounded-full flex items-center justify-center border-2 border-[#24120b] shadow-md animate-pop-badge"
-                >
-                  {cantidadTotal}
-                </span>
-              )}
-            </button>
-
-            {/* Perfil o Acceso */}
-            {usuario ? (
-              <div className="flex items-center space-x-3 bg-stone-900/80 border border-stone-800 py-1.5 px-3.5 rounded-2xl">
-                <Link
-                  to="/mis-datos"
-                  className="flex items-center space-x-2 text-sm text-amber-100 hover:text-rose-200 transition-colors"
-                  title="Ver datos personales (Ley 25.326)"
-                >
-                  <div className="w-7 h-7 rounded-full bg-rose-600/40 flex items-center justify-center text-rose-200 font-bold text-xs">
-                    {usuario.nombre ? usuario.nombre.charAt(0).toUpperCase() : 'U'}
-                  </div>
-                  <div className="text-left">
-                    <span className="block font-semibold text-xs text-amber-100 leading-tight">
-                      {usuario.nombre.split(' ')[0]}
-                    </span>
-                    <span className="text-[10px] text-rose-400 capitalize">
-                      {usuario.rol}
-                    </span>
-                  </div>
-                </Link>
-
-                <div className="w-[1px] h-6 bg-stone-700"></div>
-
-                <button
-                  onClick={handleCerrarSesion}
-                  className="p-1.5 rounded-lg text-rose-300/70 hover:text-rose-200 hover:bg-rose-950/50 transition-colors"
-                  title="Cerrar sesión"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center space-x-2">
-                <Link
-                  to="/login"
-                  className="px-4 py-2 rounded-xl text-sm font-medium text-amber-100 hover:text-white hover:bg-stone-800 transition-colors flex items-center space-x-1.5"
-                >
-                  <LogIn className="w-4 h-4 text-rose-400" />
-                  <span>Entrar</span>
-                </Link>
-                <Link
-                  to="/registro"
-                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-gradient-to-r from-rose-500 to-amber-600 hover:from-rose-600 hover:to-amber-700 text-white shadow-md shadow-rose-600/20 transition-all flex items-center space-x-1.5"
-                >
-                  <UserPlus className="w-4 h-4" />
-                  <span>Registrarse</span>
-                </Link>
-              </div>
-            )}
           </div>
 
-          {/* Botones Móvil: Carrito + Menú Hamburguesa */}
-          <div className="flex items-center space-x-2 md:hidden">
+          {/* Buscador + Auth + Resumen Carrito */}
+          <div className="flex items-center space-x-4 w-full md:w-auto justify-between md:justify-end">
+            
+            {/* Buscador de la Top Bar */}
+            <form onSubmit={handleSearchSubmit} className="relative flex-1 md:flex-initial max-w-[200px] sm:max-w-[240px]">
+              <input
+                type="text"
+                placeholder="Buscar postre..."
+                value={busquedaLocal}
+                onChange={(e) => setBusquedaLocal(e.target.value)}
+                className="w-full bg-[#4A1525] border border-rose-800/60 rounded-full text-xs text-white placeholder-rose-200/50 pl-8 pr-3 py-1 focus:outline-none focus:ring-1 focus:ring-[#E85D88]"
+              />
+              <Search className="w-3.5 h-3.5 text-rose-300 absolute left-2.5 top-1/2 -translate-y-1/2" />
+            </form>
+
+            {/* Login / Registro o Nombre de Usuario */}
+            <div className="flex items-center space-x-3 shrink-0">
+              {usuario ? (
+                <div className="flex items-center space-x-2 bg-[#4A1525] border border-rose-800/50 py-1 px-3 rounded-full">
+                  <Link
+                    to="/mis-datos"
+                    className="flex items-center space-x-1.5 text-xs text-rose-100 hover:text-[#E85D88] transition-colors"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-[#E85D88] text-white flex items-center justify-center text-[10px] font-bold">
+                      {usuario.nombre ? usuario.nombre.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                    <span className="font-medium max-w-[90px] truncate">
+                      {usuario.nombre ? usuario.nombre.split(' ')[0] : 'Usuario'}
+                    </span>
+                  </Link>
+                  <button
+                    onClick={handleCerrarSesion}
+                    className="text-rose-300 hover:text-white ml-1"
+                    title="Cerrar sesión"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Link
+                    to="/login"
+                    className="text-xs font-semibold text-rose-100 hover:text-[#E85D88] transition-colors flex items-center space-x-1"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-[#E85D88]" />
+                    <span>Entrar</span>
+                  </Link>
+                  <span className="text-rose-800">/</span>
+                  <Link
+                    to="/registro"
+                    className="text-xs font-semibold text-rose-100 hover:text-[#E85D88] transition-colors flex items-center space-x-1"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>Registrarse</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Resumen del Carrito en vivo */}
             <button
               onClick={abrirDrawer}
-              className="relative p-2 rounded-xl bg-stone-900 border border-stone-800 text-amber-200"
-              aria-label="Abrir carrito"
+              className="flex items-center space-x-2 bg-[#E85D88] hover:bg-[#D81B60] text-white px-3 py-1 rounded-full font-bold text-xs shadow-sm transition-all transform active:scale-95 shrink-0"
+              title="Abrir resumen del carrito"
             >
-              <ShoppingBag className="w-5 h-5 text-rose-400" />
-              {cantidadTotal > 0 && (
-                <span
-                  key={cantidadTotal}
-                  className="absolute -top-1.5 -right-1.5 bg-rose-500 text-white font-bold text-[10px] min-w-[18px] h-[18px] px-0.5 rounded-full flex items-center justify-center border-2 border-[#24120b] animate-pop-badge"
-                >
-                  {cantidadTotal}
-                </span>
-              )}
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>{cantidadTotal}</span>
+              <span className="hidden sm:inline">| ${total.toLocaleString('es-AR')}</span>
             </button>
 
-            <button
-              onClick={() => setMenuAbierto(!menuAbierto)}
-              className="p-2 rounded-xl text-amber-200 hover:text-white hover:bg-stone-800 focus:outline-none"
-              aria-label="Abrir menú"
-            >
-              {menuAbierto ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
           </div>
 
         </div>
       </div>
 
+      {/* 2. MENÚ PRINCIPAL (Fondo Blanco #FFFFFF) */}
+      <nav className="bg-white border-b border-rose-100/80 px-4 sm:px-6 py-3">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          
+          {/* Logo Circular Rosa "Dulce Vicio" */}
+          <Link to="/" className="flex items-center space-x-3.5 group">
+            <div className="w-12 h-12 rounded-full bg-[#E85D88] group-hover:bg-[#D81B60] flex items-center justify-center text-white shadow-md shadow-rose-500/30 transition-transform duration-300 group-hover:scale-105">
+              <Cake className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <span className="font-serif font-bold text-2xl sm:text-3xl text-[#3B111E] tracking-tight block leading-none">
+                Dulce Vicio
+              </span>
+              <span className="text-[10px] uppercase font-sans tracking-[0.2em] text-[#E85D88] font-bold block mt-1">
+                Pastelería Boutique
+              </span>
+            </div>
+          </Link>
+
+          {/* Navegación Horizontal Limpia en Mayúsculas (Escritorio) */}
+          <div className="hidden lg:flex items-center space-x-8 font-sans font-semibold text-xs tracking-wider text-[#3B111E]">
+            <Link
+              to="/"
+              className={`hover:text-[#E85D88] transition-colors py-1 border-b-2 ${
+                esLinkActivo('/') ? 'border-[#E85D88] text-[#E85D88]' : 'border-transparent'
+              }`}
+            >
+              HOME
+            </Link>
+
+            <a
+              href="#nosotros"
+              onClick={(e) => {
+                if (location.pathname !== '/') {
+                  e.preventDefault();
+                  navigate('/');
+                  setTimeout(() => {
+                    document.getElementById('nosotros')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+              }}
+              className="hover:text-[#E85D88] transition-colors py-1 border-b-2 border-transparent"
+            >
+              QUIÉNES SOMOS
+            </a>
+
+            <a
+              href="#catalogo"
+              onClick={(e) => {
+                if (location.pathname !== '/') {
+                  e.preventDefault();
+                  navigate('/');
+                  setTimeout(() => {
+                    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+              }}
+              className="hover:text-[#E85D88] transition-colors py-1 border-b-2 border-transparent"
+            >
+              TIENDA
+            </a>
+
+            {usuario && (
+              <Link
+                to="/mis-pedidos"
+                className={`hover:text-[#E85D88] transition-colors py-1 border-b-2 ${
+                  esLinkActivo('/mis-pedidos') ? 'border-[#E85D88] text-[#E85D88]' : 'border-transparent'
+                }`}
+              >
+                MIS PEDIDOS
+              </Link>
+            )}
+
+            {usuario && (
+              <Link
+                to="/mis-datos"
+                className={`hover:text-[#E85D88] transition-colors py-1 border-b-2 ${
+                  esLinkActivo('/mis-datos') ? 'border-[#E85D88] text-[#E85D88]' : 'border-transparent'
+                }`}
+              >
+                MIS DATOS
+              </Link>
+            )}
+
+            <Link
+              to="/arrepentimiento"
+              className={`hover:text-[#E85D88] transition-colors py-1 border-b-2 ${
+                esLinkActivo('/arrepentimiento') ? 'border-[#E85D88] text-[#E85D88]' : 'border-transparent'
+              }`}
+            >
+              ARREPENTIMIENTO
+            </Link>
+
+            {esAdmin && (
+              <Link
+                to="/admin"
+                className="bg-[#3B111E] text-white px-3 py-1.5 rounded-full font-bold text-[11px] hover:bg-[#5C1B2E] transition-colors"
+              >
+                ADMIN
+              </Link>
+            )}
+
+            <a
+              href="#contacto"
+              onClick={(e) => {
+                if (location.pathname !== '/') {
+                  e.preventDefault();
+                  navigate('/');
+                  setTimeout(() => {
+                    document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' });
+                  }, 100);
+                }
+              }}
+              className="hover:text-[#E85D88] transition-colors py-1 border-b-2 border-transparent"
+            >
+              CONTACTO
+            </a>
+          </div>
+
+          {/* Hamburguesa Móvil */}
+          <button
+            onClick={() => setMenuAbierto(!menuAbierto)}
+            className="lg:hidden p-2 rounded-xl text-[#3B111E] hover:text-[#E85D88] hover:bg-rose-50 transition-colors"
+            aria-label="Abrir menú de navegación"
+          >
+            {menuAbierto ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+
+        </div>
+      </nav>
+
       {/* Menú Desplegable Móvil */}
-      {menuAbierto && (
-        <div className="md:hidden bg-[#1c0c06] border-b border-rose-950 px-4 pt-3 pb-5 space-y-3 animate-fade-in">
-          <div className="space-y-1">
+      <AnimatePresence>
+        {menuAbierto && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="lg:hidden bg-white border-b border-rose-200 px-6 py-4 space-y-3 font-sans text-sm font-semibold text-[#3B111E]"
+          >
             <Link
               to="/"
               onClick={() => setMenuAbierto(false)}
-              className="block px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-stone-800"
+              className="block py-2 hover:text-[#E85D88]"
             >
-              Catálogo de Postres
+              HOME
             </Link>
 
-            <Link
-              to="/carrito"
+            <a
+              href="#nosotros"
               onClick={() => setMenuAbierto(false)}
-              className="flex items-center justify-between px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-stone-800"
+              className="block py-2 hover:text-[#E85D88]"
             >
-              <div className="flex items-center space-x-2">
-                <ShoppingBag className="w-4 h-4 text-rose-400" />
-                <span>Mi Carrito</span>
-              </div>
-              <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300">
-                {cantidadTotal} ítems
-              </span>
-            </Link>
+              QUIÉNES SOMOS
+            </a>
+
+            <a
+              href="#catalogo"
+              onClick={() => setMenuAbierto(false)}
+              className="block py-2 hover:text-[#E85D88]"
+            >
+              TIENDA
+            </a>
 
             {usuario && (
               <Link
                 to="/mis-pedidos"
                 onClick={() => setMenuAbierto(false)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-stone-800"
+                className="block py-2 hover:text-[#E85D88]"
               >
-                <Package className="w-4 h-4 text-rose-400" />
-                <span>Mis Pedidos Confirmados</span>
+                MIS PEDIDOS
               </Link>
             )}
 
@@ -273,69 +350,40 @@ export default function Navbar() {
               <Link
                 to="/mis-datos"
                 onClick={() => setMenuAbierto(false)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium text-amber-100 hover:bg-stone-800"
+                className="block py-2 hover:text-[#E85D88]"
               >
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                <span>Mis Datos & Portabilidad</span>
+                MIS DATOS
               </Link>
             )}
 
             <Link
               to="/arrepentimiento"
               onClick={() => setMenuAbierto(false)}
-              className="flex items-center space-x-2 px-3 py-2 rounded-lg text-sm font-semibold text-rose-300 bg-rose-950/60 border border-rose-500/40"
+              className="block py-2 text-[#E85D88]"
             >
-              <RotateCcw className="w-4 h-4 text-rose-400" />
-              <span>Botón de Arrepentimiento (Res. 424/2020)</span>
+              BOTÓN DE ARREPENTIMIENTO
             </Link>
 
             {esAdmin && (
               <Link
                 to="/admin"
                 onClick={() => setMenuAbierto(false)}
-                className="flex items-center space-x-2 px-3 py-2 rounded-lg text-base font-medium text-amber-300 bg-amber-950/60"
+                className="block py-2 text-[#3B111E] font-bold"
               >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Panel Administrador</span>
+                PANEL ADMIN
               </Link>
             )}
-          </div>
 
-          <div className="pt-3 border-t border-stone-800">
-            {usuario ? (
-              <div className="space-y-2">
-                <div className="px-3 py-2 text-xs text-amber-200/80">
-                  Conectado como <strong>{usuario.nombre}</strong> ({usuario.email})
-                </div>
-                <button
-                  onClick={handleCerrarSesion}
-                  className="w-full flex items-center justify-center space-x-2 px-3 py-2.5 rounded-xl text-sm font-medium text-rose-200 bg-rose-950/40 border border-rose-900/60"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Cerrar Sesión</span>
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  to="/login"
-                  onClick={() => setMenuAbierto(false)}
-                  className="flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-medium bg-stone-900 text-amber-200 border border-stone-800 text-center"
-                >
-                  Entrar
-                </Link>
-                <Link
-                  to="/registro"
-                  onClick={() => setMenuAbierto(false)}
-                  className="flex items-center justify-center px-4 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-rose-500 to-amber-600 text-white text-center shadow-md shadow-rose-600/20"
-                >
-                  Registrarse
-                </Link>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
+            <a
+              href="#contacto"
+              onClick={() => setMenuAbierto(false)}
+              className="block py-2 hover:text-[#E85D88]"
+            >
+              CONTACTO
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

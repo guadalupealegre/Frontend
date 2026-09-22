@@ -13,6 +13,12 @@ import {
   Loader2,
   AlertCircle,
   RefreshCw,
+  ShoppingBag,
+  MapPin,
+  Clock,
+  Truck,
+  Store,
+  Coffee,
   Heart,
 } from 'lucide-react';
 
@@ -27,7 +33,7 @@ export default function Catalogo() {
   // Estados de filtros y paginación
   const [busqueda, setBusqueda] = useState('');
   const [precioMax, setPrecioMax] = useState('');
-  const [pagina, setPagina] = useState(0); // 0-indexed para skip
+  const [pagina, setPagina] = useState(0); // 0-indexed
 
   useEffect(() => {
     let cancelado = false;
@@ -83,159 +89,298 @@ export default function Catalogo() {
 
   const totalPaginas = Math.ceil(total / LIMITE_POR_PAGINA) || 1;
 
+  const scrollToGrid = () => {
+    document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
-      className="space-y-10 py-2"
+      className="space-y-16 py-2"
     >
-      {/* Hero Banner Dulce Vicio */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#28130a] via-[#3d1d11] to-[#200f07] text-amber-50 p-8 md:p-12 shadow-warm border border-rose-950/60">
-        <div className="relative z-10 max-w-3xl space-y-4">
-          <div className="inline-flex items-center space-x-2 bg-rose-500/20 border border-rose-400/30 px-3.5 py-1.5 rounded-full text-xs font-semibold text-rose-200">
-            <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-            <span>Repostería Fina Artesanal</span>
-          </div>
-          
-          <h1 className="font-display font-extrabold text-3xl sm:text-4xl md:text-5xl tracking-tight text-white leading-tight">
-            El sabor de lo auténtico en cada porción.
+      {/* 1. SECCIÓN HERO (Inspirada en plantilla Wix) */}
+      <section className="relative rounded-3xl overflow-hidden shadow-2xl min-h-[480px] sm:min-h-[540px] flex items-center justify-center border border-rose-900/20">
+        {/* Imagen de fondo gourmet con overlay de alta elegancia */}
+        <div
+          className="absolute inset-0 bg-cover bg-center scale-105 transform transition-transform duration-1000"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=1920&q=80')`,
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#3B111E]/90 via-[#3B111E]/75 to-transparent" />
+
+        {/* Contenido Hero */}
+        <div className="relative z-10 w-full max-w-4xl px-6 sm:px-12 py-12 text-[#FAF8F5] space-y-6">
+          <span className="text-xs uppercase tracking-[0.3em] font-bold text-[#E85D88] block">
+            Pastelería y café Est. 2024
+          </span>
+
+          <h1 className="font-serif font-bold text-4xl sm:text-6xl lg:text-7xl text-white tracking-tight leading-[1.1]">
+            Tu lugar para comer delicioso y tomar café
           </h1>
-          
-          <p className="text-sm sm:text-base text-rose-100/80 leading-relaxed">
-            Descubrí nuestros postres recién horneados elaborados con ingredientes de primera línea. Transparencia total de precios de contado, opciones de cuotas y cumplimiento legal garantizado.
+
+          <p className="text-sm sm:text-base text-rose-100/90 max-w-xl leading-relaxed font-sans">
+            En Dulce Vicio creamos recetas artesanales únicas con ingredientes seleccionados de primera línea. Precios transparentes de contado, cuotas sin sorpresas y garantía legal.
           </p>
 
-          {/* Badges de Confianza Legal */}
-          <div className="pt-2 flex flex-wrap gap-3 text-xs text-rose-100/90 font-medium">
-            <div className="flex items-center space-x-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10">
-              <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>Precios Claros (Ley 24.240)</span>
-            </div>
-            <div className="flex items-center space-x-1.5 bg-black/30 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10">
-              <RotateCcw className="w-4 h-4 text-rose-400" />
-              <span>Botón de Arrepentimiento (Res. 424/2020)</span>
-            </div>
+          <div className="pt-4 flex flex-wrap gap-4">
+            <button
+              onClick={scrollToGrid}
+              className="px-8 py-3.5 bg-[#E85D88] hover:bg-[#D81B60] text-white font-bold text-xs uppercase tracking-widest rounded-full shadow-lg shadow-[#E85D88]/30 transition-all hover:scale-105 active:scale-95"
+            >
+              Pedir ahora
+            </button>
+            <button
+              onClick={scrollToGrid}
+              className="px-8 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold text-xs uppercase tracking-widest rounded-full backdrop-blur-md transition-all hover:scale-105 active:scale-95"
+            >
+              Nuestro menú
+            </button>
           </div>
         </div>
       </section>
 
-      {/* Barra de Búsqueda y Filtros */}
-      <section className="bg-white p-5 rounded-3xl border border-rose-100 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-        {/* Buscador por Nombre */}
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            placeholder="Buscar postre (ej: Tiramisú, Brownie)..."
-            value={busqueda}
-            onChange={handleBusquedaChange}
-            className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
-          />
+      {/* 2. DOS CUADROS FLOTANTES CENTRALES ESTILO BOUTIQUE */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-6 -mt-8 relative z-20">
+        {/* Cuadro 1: Tu pedido a domicilio */}
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl p-8 border border-rose-200/80 shadow-warm flex items-start space-x-5"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-[#FFF1F5] text-[#E85D88] border border-[#E85D88]/30 flex items-center justify-center shrink-0">
+            <Truck className="w-7 h-7 text-[#E85D88]" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-serif font-bold text-xl text-[#3B111E]">
+              Tu pedido a domicilio
+            </h3>
+            <p className="text-xs text-stone-600 leading-relaxed font-sans">
+              Envíos cuidados para conservar el sabor recién horneado de cada porción directamente en la puerta de tu casa.
+            </p>
+            <span className="inline-block text-[11px] font-bold text-[#E85D88] uppercase tracking-wider pt-1">
+              Desayuno, merienda y repostería artesanal
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Cuadro 2: Compra online / Recogida en tienda */}
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="bg-white rounded-3xl p-8 border border-rose-200/80 shadow-warm flex items-start space-x-5"
+        >
+          <div className="w-14 h-14 rounded-2xl bg-[#FAF0F3] text-[#3B111E] border border-[#3B111E]/20 flex items-center justify-center shrink-0">
+            <Store className="w-7 h-7 text-[#3B111E]" />
+          </div>
+          <div className="space-y-2">
+            <h3 className="font-serif font-bold text-xl text-[#3B111E]">
+              Compra online / Recogida en tienda
+            </h3>
+            <p className="text-xs text-stone-600 leading-relaxed font-sans">
+              Comprá en la web y retirá sin demoras por nuestra boutique boutique pastelera.
+            </p>
+            <div className="text-[11px] text-[#3B111E] font-semibold pt-1">
+              Av. Fray A. Alcalde 10 | Lun - Vie: 9:00 - 18:00
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* 3. SECCIÓN PRESENTACIÓN BOUTIQUE / QUIÉNES SOMOS */}
+      <section id="nosotros" className="bg-white rounded-3xl p-8 sm:p-12 border border-rose-200/60 shadow-sm space-y-12">
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#E85D88]">
+            Experiencia Dulce Vicio
+          </span>
+          <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#3B111E]">
+            Repostería de autor elaborada a diario
+          </h2>
+          <p className="text-xs sm:text-sm text-stone-600 leading-relaxed font-sans">
+            Cada receta combina técnicas tradicionales de pastelería con materias primas seleccionadas. Creemos en la transparencia absoluta de precios y en un servicio excepcional.
+          </p>
         </div>
 
-        {/* Filtro por Precio Máximo */}
-        <div className="flex items-center space-x-3 w-full md:w-auto">
-          <div className="relative flex-1 md:w-56">
-            <SlidersHorizontal className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="number"
-              placeholder="Precio Máximo ($)"
-              value={precioMax}
-              onChange={handlePrecioMaxChange}
-              min="0"
-              className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/40 focus:border-rose-400 text-stone-800"
-            />
+        {/* Bloques inspirados en la plantilla Wix (Come, Bebe, Disfruta) */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="space-y-3 p-6 rounded-2xl bg-[#FAF8F5] border border-rose-100/80">
+            <h3 className="font-serif font-bold text-2xl text-[#3B111E]">Come.</h3>
+            <p className="text-xs font-semibold text-[#E85D88]">Desayuno, comida y repostería artesanal</p>
+            <p className="text-xs text-stone-600 leading-relaxed">
+              Tiramisú, Brownies intensos, Chocotorta clásica argentina y tortas de elaboración propia horneadas en el día.
+            </p>
           </div>
 
-          {(busqueda || precioMax) && (
+          <div className="space-y-3 p-6 rounded-2xl bg-[#FAF8F5] border border-rose-100/80">
+            <h3 className="font-serif font-bold text-2xl text-[#3B111E]">Bebe.</h3>
+            <p className="text-xs font-semibold text-[#E85D88]">La taza más fresca de la ciudad</p>
+            <p className="text-xs text-stone-600 leading-relaxed">
+              El maridaje perfecto para tus postres favoritos con cafés de especialidad e infusiones seleccionadas.
+            </p>
+          </div>
+
+          <div className="space-y-3 p-6 rounded-2xl bg-[#FAF8F5] border border-rose-100/80">
+            <h3 className="font-serif font-bold text-2xl text-[#3B111E]">Disfruta.</h3>
+            <p className="text-xs font-semibold text-[#E85D88]">Siéntete como en casa</p>
+            <p className="text-xs text-stone-600 leading-relaxed">
+              Hacé tu pedido online con total tranquilidad y respaldo legal (Ley 24.240 y Ley 25.326).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. GRILLA DE PRODUCTOS DE DULCE VICIO */}
+      <section id="catalogo" className="space-y-8">
+        
+        {/* Encabezado y Filtros */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-rose-200/80 pb-6">
+          <div>
+            <span className="text-xs uppercase tracking-[0.2em] font-bold text-[#E85D88]">
+              Nuestra Carta
+            </span>
+            <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#3B111E]">
+              Postres de Dulce Vicio
+            </h2>
+          </div>
+
+          {/* Barra de Filtros */}
+          <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
+            {/* Buscador */}
+            <div className="relative w-full sm:w-64">
+              <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Buscar postre..."
+                value={busqueda}
+                onChange={handleBusquedaChange}
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
+              />
+            </div>
+
+            {/* Precio Máximo */}
+            <div className="relative w-full sm:w-48">
+              <SlidersHorizontal className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="number"
+                placeholder="Precio Max ($)"
+                value={precioMax}
+                onChange={handlePrecioMaxChange}
+                min="0"
+                className="w-full pl-10 pr-4 py-2.5 bg-white border border-rose-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-[#E85D88] text-[#3B111E]"
+              />
+            </div>
+
+            {(busqueda || precioMax) && (
+              <button
+                onClick={limpiarFiltros}
+                className="px-4 py-2.5 text-xs text-[#3B111E] bg-rose-100 hover:bg-rose-200 rounded-2xl font-bold transition-colors shrink-0"
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Estado de Error */}
+        {error && (
+          <div className="bg-rose-50 border border-rose-200 text-rose-900 p-6 rounded-3xl flex items-center justify-between gap-4">
+            <div className="flex items-center space-x-3">
+              <AlertCircle className="w-6 h-6 text-[#E85D88] shrink-0" />
+              <p className="text-xs sm:text-sm font-medium">{error}</p>
+            </div>
+            <button
+              onClick={() => setPagina(0)}
+              className="px-4 py-2 bg-[#3B111E] text-white rounded-xl text-xs font-bold hover:bg-[#5C1B2E] flex items-center space-x-1.5"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+              <span>Reintentar</span>
+            </button>
+          </div>
+        )}
+
+        {/* Renderizado de Tarjetas */}
+        {cargando ? (
+          <div className="min-h-[320px] flex flex-col items-center justify-center space-y-3">
+            <Loader2 className="w-9 h-9 text-[#E85D88] animate-spin" />
+            <p className="text-xs font-semibold text-stone-600">Cargando especialidades de Dulce Vicio...</p>
+          </div>
+        ) : productos.length === 0 ? (
+          <div className="bg-white rounded-3xl p-12 text-center border border-rose-200/80 space-y-3 shadow-sm">
+            <p className="text-5xl">🧁</p>
+            <h3 className="font-serif font-bold text-xl text-[#3B111E]">No encontramos postres</h3>
+            <p className="text-xs text-stone-500 max-w-md mx-auto">
+              No hay productos que coincidan con los filtros aplicados. Intentá con otro nombre o limpiá los filtros.
+            </p>
             <button
               onClick={limpiarFiltros}
-              className="px-3.5 py-2.5 text-xs text-stone-600 hover:text-stone-900 bg-stone-100 hover:bg-stone-200 rounded-2xl font-medium transition-colors"
+              className="mt-2 px-6 py-3 bg-[#3B111E] text-white rounded-xl text-xs font-bold hover:bg-[#E85D88] transition-colors shadow-sm"
             >
-              Limpiar
+              Ver todos los postres
             </button>
-          )}
-        </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {productos.map((producto) => (
+              <ProductCard key={producto.id} producto={producto} />
+            ))}
+          </div>
+        )}
+
+        {/* Paginación */}
+        {!cargando && total > LIMITE_POR_PAGINA && (
+          <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-rose-200/80 shadow-sm text-xs">
+            <div className="text-stone-500">
+              Mostrando <span className="font-bold text-[#3B111E]">{productos.length}</span> de <span className="font-bold text-[#3B111E]">{total}</span> postres
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <button
+                onClick={() => setPagina((p) => Math.max(0, p - 1))}
+                disabled={pagina === 0}
+                className="px-3 py-1.5 rounded-xl border border-rose-200 text-xs font-bold text-[#3B111E] hover:bg-rose-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>Anterior</span>
+              </button>
+
+              <span className="font-semibold text-[#3B111E] px-2">
+                Página {pagina + 1} de {totalPaginas}
+              </span>
+
+              <button
+                onClick={() => setPagina((p) => (p + 1 < totalPaginas ? p + 1 : p))}
+                disabled={pagina + 1 >= totalPaginas}
+                className="px-3 py-1.5 rounded-xl border border-rose-200 text-xs font-bold text-[#3B111E] hover:bg-rose-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1"
+              >
+                <span>Siguiente</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </section>
 
-      {/* Estado de Error */}
-      {error && (
-        <div className="bg-rose-50 border border-rose-200 text-rose-800 p-5 rounded-3xl flex items-center justify-between gap-4">
-          <div className="flex items-center space-x-3">
-            <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
-            <p className="text-sm font-medium">{error}</p>
-          </div>
-          <button
-            onClick={() => setPagina(0)}
-            className="px-3.5 py-1.5 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-700 flex items-center space-x-1"
-          >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Reintentar</span>
-          </button>
-        </div>
-      )}
+      {/* 5. SECCIÓN CONTACTO (Inspirada en Wix: Pásate a comer algo) */}
+      <section id="contacto" className="bg-[#FAF0F3] rounded-3xl p-8 sm:p-12 border border-rose-200 text-center space-y-8">
+        <h2 className="font-serif font-bold text-3xl sm:text-4xl text-[#3B111E]">
+          Pásate a comer algo.
+        </h2>
 
-      {/* Grid de Productos */}
-      {cargando ? (
-        <div className="min-h-[300px] flex flex-col items-center justify-center space-y-3">
-          <Loader2 className="w-8 h-8 text-rose-500 animate-spin" />
-          <p className="text-sm font-medium text-stone-600">Cargando delicias de Dulce Vicio...</p>
-        </div>
-      ) : productos.length === 0 ? (
-        <div className="bg-white rounded-3xl p-12 text-center border border-rose-100 space-y-3">
-          <p className="text-4xl">🧁</p>
-          <h3 className="font-display font-bold text-lg text-stone-800">No encontramos postres</h3>
-          <p className="text-xs text-stone-500 max-w-md mx-auto">
-            No hay especialidades que coincidan con los filtros aplicados. Intentá con otro nombre o limpiá los filtros.
-          </p>
-          <button
-            onClick={limpiarFiltros}
-            className="mt-2 px-5 py-2.5 bg-rose-600 text-white rounded-xl text-xs font-semibold hover:bg-rose-700 transition-colors shadow-sm"
-          >
-            Ver todos los postres
-          </button>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {productos.map((producto) => (
-            <ProductCard key={producto.id} producto={producto} />
-          ))}
-        </div>
-      )}
-
-      {/* Paginación */}
-      {!cargando && total > LIMITE_POR_PAGINA && (
-        <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-rose-100 shadow-sm text-sm">
-          <div className="text-xs text-stone-500">
-            Mostrando <span className="font-semibold text-stone-800">{productos.length}</span> de <span className="font-semibold text-stone-800">{total}</span> postres
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto text-xs text-stone-700">
+          <div className="space-y-2 border-r-0 md:border-r border-rose-200/80 pr-0 md:pr-8">
+            <h3 className="font-serif font-bold text-lg text-[#3B111E]">Dirección</h3>
+            <p>Av. Fray A. Alcalde 10,</p>
+            <p>44100 Buenos Aires, Arg.</p>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setPagina((p) => Math.max(0, p - 1))}
-              disabled={pagina === 0}
-              className="px-3 py-1.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-700 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              <span>Anterior</span>
-            </button>
-
-            <span className="text-xs font-semibold text-stone-800 px-2">
-              Página {pagina + 1} de {totalPaginas}
-            </span>
-
-            <button
-              onClick={() => setPagina((p) => (p + 1 < totalPaginas ? p + 1 : p))}
-              disabled={pagina + 1 >= totalPaginas}
-              className="px-3 py-1.5 rounded-xl border border-stone-200 text-xs font-medium text-stone-700 hover:bg-stone-50 disabled:opacity-40 disabled:cursor-not-allowed flex items-center space-x-1"
-            >
-              <span>Siguiente</span>
-              <ChevronRight className="w-4 h-4" />
-            </button>
+          <div className="space-y-2">
+            <h3 className="font-serif font-bold text-lg text-[#3B111E]">Horario laboral</h3>
+            <p>Lun - Vie: 9:00 - 18:00</p>
+            <p>Sábado: 10:00 - 14:00</p>
+            <p className="text-stone-400">Domingo: cerrado</p>
           </div>
         </div>
-      )}
+      </section>
     </motion.div>
   );
 }

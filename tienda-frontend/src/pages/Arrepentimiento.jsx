@@ -110,37 +110,37 @@ export default function Arrepentimiento() {
       className="max-w-4xl mx-auto space-y-8 py-4 px-2 sm:px-4"
     >
       {/* Banner Legal Informativo */}
-      <div className="bg-gradient-to-r from-rose-950 via-rose-900 to-amber-950 text-rose-50 rounded-3xl p-6 sm:p-8 shadow-warm border border-rose-800/50 space-y-4">
-        <div className="flex items-center space-x-3.5">
-          <div className="p-3.5 bg-rose-500/20 text-rose-300 rounded-2xl border border-rose-500/30 shrink-0">
-            <RotateCcw className="w-7 h-7" />
+      <div className="bg-[#3B111E] text-[#FAF8F5] rounded-3xl p-8 shadow-xl border border-rose-900/40 space-y-4">
+        <div className="flex items-center space-x-4">
+          <div className="p-4 bg-[#E85D88]/20 text-[#E85D88] rounded-2xl border border-[#E85D88]/30 shrink-0">
+            <RotateCcw className="w-8 h-8 text-[#E85D88]" />
           </div>
           <div>
-            <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-rose-300 uppercase tracking-wider mb-0.5">
+            <div className="inline-flex items-center space-x-1.5 text-xs font-bold text-[#E85D88] uppercase tracking-wider mb-1">
               <Scale className="w-3.5 h-3.5" />
-              <span>Resolución 424/2020 & Ley N° 24.240 Art. 34</span>
+              <span>Resolución 424/2020 & Disp. 954/2025 (Ley N° 24.240 Art. 34)</span>
             </div>
-            <h1 className="font-display font-bold text-2xl sm:text-3xl text-white">
+            <h1 className="font-serif font-bold text-3xl sm:text-4xl text-white">
               Botón de Arrepentimiento
             </h1>
           </div>
         </div>
 
-        <div className="p-4 bg-black/30 backdrop-blur-md rounded-2xl border border-white/10 text-xs sm:text-sm text-rose-100/90 leading-relaxed space-y-2">
+        <div className="p-5 bg-[#4A1525] rounded-2xl border border-rose-800/50 text-xs sm:text-sm text-rose-100/90 leading-relaxed space-y-3">
           <p>
-            En cumplimiento con la normativa comercial argentina para contrataciones a distancia y comercio electrónico, tenés derecho a <strong>revocar tu compra dentro de los diez (10) días corridos</strong> contados a partir de la fecha de entrega del producto o de la celebración del contrato.
+            En cumplimiento con la normativa comercial argentina para comercio electrónico, tenés derecho a <strong>revocar tu compra dentro de los diez (10) días corridos</strong> contados a partir de la fecha de entrega del producto o de la celebración del contrato.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 text-[11px] font-medium text-rose-200">
-            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
-              <Sparkles className="w-4 h-4 text-rose-400 shrink-0" />
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs font-semibold text-white">
+            <div className="flex items-center space-x-2 bg-white/5 p-2.5 rounded-xl border border-white/10">
+              <Sparkles className="w-4 h-4 text-[#E85D88] shrink-0" />
               <span>Sin costo ni penalidad</span>
             </div>
-            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
-              <ShieldCheck className="w-4 h-4 text-rose-400 shrink-0" />
+            <div className="flex items-center space-x-2 bg-white/5 p-2.5 rounded-xl border border-white/10">
+              <ShieldCheck className="w-4 h-4 text-[#E85D88] shrink-0" />
               <span>Gastos a cargo del vendedor</span>
             </div>
-            <div className="flex items-center space-x-1.5 bg-white/5 p-2 rounded-xl border border-white/10">
-              <FileText className="w-4 h-4 text-rose-400 shrink-0" />
+            <div className="flex items-center space-x-2 bg-white/5 p-2.5 rounded-xl border border-white/10">
+              <FileText className="w-4 h-4 text-[#E85D88] shrink-0" />
               <span>Código legal inmediato</span>
             </div>
           </div>
@@ -154,13 +154,13 @@ export default function Arrepentimiento() {
           {codigoExito && (
             <div
               role="status"
-              className="bg-white rounded-3xl border-2 border-rose-400 p-6 sm:p-8 shadow-warm space-y-5 text-center"
+              className="bg-white rounded-3xl border-2 border-[#E85D88] p-8 shadow-xl space-y-5 text-center"
             >
-              <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-full bg-[#FFF1F5] text-[#E85D88] flex items-center justify-center mx-auto border border-rose-200">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <div className="space-y-1">
-                <h2 className="font-display font-bold text-2xl text-stone-900">
+                <h2 className="font-serif font-bold text-2xl text-[#3B111E]">
                   ¡Revocación Registrada con Éxito!
                 </h2>
                 <p className="text-xs text-stone-600 max-w-md mx-auto">
@@ -168,14 +168,14 @@ export default function Arrepentimiento() {
                 </p>
               </div>
 
-              <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 max-w-md mx-auto flex items-center justify-between gap-3">
+              <div className="p-4 bg-[#FFF1F5] rounded-2xl border border-rose-200 max-w-md mx-auto flex items-center justify-between gap-3">
                 <div className="text-left">
                   <span className="text-[10px] uppercase font-bold text-stone-500 block">Código Oficial:</span>
-                  <span className="font-mono font-extrabold text-xl text-rose-600">{codigoExito}</span>
+                  <span className="font-mono font-extrabold text-xl text-[#E85D88]">{codigoExito}</span>
                 </div>
                 <button
                   onClick={() => handleCopiar(codigoExito)}
-                  className="px-3.5 py-2 bg-rose-600 text-white rounded-xl text-xs font-semibold flex items-center space-x-1.5 hover:bg-rose-700 transition-colors"
+                  className="px-4 py-2 bg-[#E85D88] text-white rounded-xl text-xs font-bold flex items-center space-x-1.5 hover:bg-[#D81B60] transition-colors"
                 >
                   {copiado ? <Check className="w-4 h-4 text-white" /> : <Copy className="w-4 h-4" />}
                   <span>{copiado ? 'Copiado' : 'Copiar'}</span>
@@ -185,24 +185,24 @@ export default function Arrepentimiento() {
               <div className="pt-2">
                 <Link
                   to="/mis-pedidos"
-                  className="inline-flex items-center space-x-2 px-5 py-2.5 bg-stone-900 text-white text-xs font-bold rounded-xl hover:bg-stone-800 transition-colors"
+                  className="inline-flex items-center space-x-2 px-6 py-3 bg-[#3B111E] text-white text-xs font-bold rounded-xl hover:bg-[#E85D88] transition-colors"
                 >
                   <span>Ver en Mis Pedidos</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
             </div>
           )}
 
-          {/* Listado de Pedidos Revocables del Usuario */}
-          <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-stone-100">
+          {/* Listado de Pedidos Revocables */}
+          <div className="bg-white rounded-3xl border border-rose-200/80 p-8 shadow-sm space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-rose-100">
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-2xl bg-rose-50 border border-rose-200/60 flex items-center justify-center text-rose-600">
+                <div className="w-10 h-10 rounded-2xl bg-[#FFF1F5] border border-rose-200 flex items-center justify-center text-[#E85D88]">
                   <Package className="w-5 h-5" />
                 </div>
                 <div>
-                  <h2 className="font-display font-bold text-lg text-stone-900">
+                  <h2 className="font-serif font-bold text-xl text-[#3B111E]">
                     Tus compras con derecho de revocación vigente
                   </h2>
                   <p className="text-xs text-stone-500">
@@ -212,7 +212,7 @@ export default function Arrepentimiento() {
               </div>
               <Link
                 to="/mis-pedidos"
-                className="text-xs font-bold text-rose-600 hover:text-rose-800 flex items-center space-x-1"
+                className="text-xs font-bold text-[#E85D88] hover:text-[#D81B60] flex items-center space-x-1"
               >
                 <span>Ver historial completo</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -221,11 +221,11 @@ export default function Arrepentimiento() {
 
             {cargandoPedidos ? (
               <div className="py-8 text-center text-stone-500">
-                <Loader2 className="w-6 h-6 animate-spin mx-auto text-rose-500 mb-2" />
-                <span className="text-xs">Consultando tus pedidos...</span>
+                <Loader2 className="w-6 h-6 animate-spin mx-auto text-[#E85D88] mb-2" />
+                <span className="text-xs font-semibold">Consultando tus pedidos...</span>
               </div>
             ) : pedidosRevocables.length === 0 ? (
-              <div className="p-8 text-center bg-stone-50/60 rounded-2xl border border-dashed border-stone-200 space-y-2">
+              <div className="p-8 text-center bg-[#FAF8F5] rounded-2xl border border-dashed border-rose-200 space-y-2">
                 <p className="text-sm font-semibold text-stone-700">
                   No tenés pedidos activos dentro del plazo de 10 días para revocar
                 </p>
@@ -238,14 +238,14 @@ export default function Arrepentimiento() {
                 {pedidosRevocables.map((ped) => (
                   <div
                     key={ped.id}
-                    className="p-4 rounded-2xl bg-rose-50/40 border border-rose-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
+                    className="p-4 rounded-2xl bg-[#FFF1F5]/60 border border-rose-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center space-x-2">
-                        <span className="font-display font-bold text-stone-900 text-sm">
+                        <span className="font-serif font-bold text-[#3B111E] text-base">
                           Pedido #{ped.id}
                         </span>
-                        <span className="text-xs text-stone-500">
+                        <span className="text-xs text-stone-600">
                           Total: <strong>${Number(ped.total).toLocaleString('es-AR')}</strong>
                         </span>
                       </div>
@@ -257,7 +257,7 @@ export default function Arrepentimiento() {
                     <button
                       onClick={() => handleRevocarDirecto(ped.id)}
                       disabled={revocandoId === ped.id}
-                      className="px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded-xl text-xs font-bold shadow-sm flex items-center justify-center space-x-1.5 transition-all self-start sm:self-auto disabled:opacity-50"
+                      className="px-5 py-2.5 bg-[#E85D88] hover:bg-[#D81B60] text-white rounded-xl text-xs font-bold shadow-sm flex items-center justify-center space-x-1.5 transition-all self-start sm:self-auto disabled:opacity-50"
                     >
                       {revocandoId === ped.id ? (
                         <>
@@ -281,9 +281,9 @@ export default function Arrepentimiento() {
         /* CASO B: USUARIO NO LOGUEADO */
         <div className="space-y-6">
           {/* Banner de Invitación al Login */}
-          <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="bg-white rounded-3xl border border-rose-200/80 p-8 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="space-y-1 text-center sm:text-left">
-              <h2 className="font-display font-bold text-lg text-stone-900">
+              <h2 className="font-serif font-bold text-xl text-[#3B111E]">
                 ¿Realizaste tu compra con una cuenta registrada?
               </h2>
               <p className="text-xs text-stone-500">
@@ -293,9 +293,9 @@ export default function Arrepentimiento() {
             <Link
               to="/login"
               state={{ from: '/arrepentimiento' }}
-              className="px-5 py-3 rounded-2xl bg-stone-900 hover:bg-stone-800 text-white text-xs font-bold flex items-center space-x-2 transition-all shadow-md shrink-0"
+              className="px-6 py-3.5 rounded-2xl bg-[#3B111E] hover:bg-[#5C1B2E] text-white text-xs font-bold flex items-center space-x-2 transition-all shadow-md shrink-0"
             >
-              <LogIn className="w-4 h-4 text-rose-400" />
+              <LogIn className="w-4 h-4 text-[#E85D88]" />
               <span>Iniciar Sesión para Revocar</span>
             </Link>
           </div>
@@ -304,13 +304,13 @@ export default function Arrepentimiento() {
           {tramiteManualGenerado ? (
             <div
               role="status"
-              className="bg-white rounded-3xl border-2 border-rose-400 p-8 shadow-warm space-y-5 text-center"
+              className="bg-white rounded-3xl border-2 border-[#E85D88] p-8 shadow-xl space-y-5 text-center"
             >
-              <div className="w-16 h-16 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 rounded-full bg-[#FFF1F5] text-[#E85D88] flex items-center justify-center mx-auto border border-rose-200">
                 <CheckCircle2 className="w-10 h-10" />
               </div>
               <div className="space-y-1">
-                <h2 className="font-display font-bold text-2xl text-stone-900">
+                <h2 className="font-serif font-bold text-2xl text-[#3B111E]">
                   Solicitud de Revocación Registrada
                 </h2>
                 <p className="text-xs text-stone-600 max-w-md mx-auto">
@@ -318,9 +318,9 @@ export default function Arrepentimiento() {
                 </p>
               </div>
 
-              <div className="p-4 bg-rose-50 rounded-2xl border border-rose-200 max-w-md mx-auto space-y-1">
+              <div className="p-4 bg-[#FFF1F5] rounded-2xl border border-rose-200 max-w-md mx-auto space-y-1">
                 <span className="text-[11px] text-stone-500 uppercase font-bold block">Código de Trámite:</span>
-                <span className="font-mono font-extrabold text-2xl text-rose-600">{tramiteManualGenerado}</span>
+                <span className="font-mono font-extrabold text-2xl text-[#E85D88]">{tramiteManualGenerado}</span>
                 <p className="text-[11px] text-stone-500">Guardá este código como comprobante legal.</p>
               </div>
 
@@ -329,9 +329,9 @@ export default function Arrepentimiento() {
               </p>
             </div>
           ) : (
-            <div className="bg-white rounded-3xl border border-rose-100 p-6 sm:p-8 shadow-sm space-y-4">
+            <div className="bg-white rounded-3xl border border-rose-200/80 p-8 shadow-sm space-y-4">
               <div className="space-y-1">
-                <h2 className="font-display font-bold text-lg text-stone-900">
+                <h2 className="font-serif font-bold text-xl text-[#3B111E]">
                   Formulario de Solicitud de Arrepentimiento Manual
                 </h2>
                 <p className="text-xs text-stone-500">
@@ -352,7 +352,7 @@ export default function Arrepentimiento() {
                       placeholder="Ej: 104"
                       value={formManual.numeroPedido}
                       onChange={(e) => setFormManual({ ...formManual, numeroPedido: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      className="w-full px-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D88]"
                     />
                   </div>
                   <div>
@@ -366,7 +366,7 @@ export default function Arrepentimiento() {
                       placeholder="nombre@ejemplo.com"
                       value={formManual.email}
                       onChange={(e) => setFormManual({ ...formManual, email: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                      className="w-full px-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D88]"
                     />
                   </div>
                 </div>
@@ -381,7 +381,7 @@ export default function Arrepentimiento() {
                     placeholder="Ej: 11 2345 6789"
                     value={formManual.telefono}
                     onChange={(e) => setFormManual({ ...formManual, telefono: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500"
+                    className="w-full px-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D88]"
                   />
                 </div>
 
@@ -395,14 +395,14 @@ export default function Arrepentimiento() {
                     placeholder="Detalle breve de la revocación..."
                     value={formManual.motivo}
                     onChange={(e) => setFormManual({ ...formManual, motivo: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 resize-none"
+                    className="w-full px-4 py-3 bg-[#FAF8F5] border border-rose-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#E85D88] resize-none"
                   ></textarea>
                 </div>
 
                 <button
                   type="submit"
                   disabled={enviandoManual}
-                  className="w-full py-3.5 px-4 rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm shadow-md shadow-rose-600/25 flex items-center justify-center space-x-2 transition-all"
+                  className="w-full py-4 px-6 rounded-2xl bg-[#E85D88] hover:bg-[#D81B60] text-white font-bold text-sm shadow-md shadow-[#E85D88]/20 flex items-center justify-center space-x-2 transition-all"
                 >
                   <Send className="w-4 h-4" />
                   <span>{enviandoManual ? 'Generando comprobante...' : 'Enviar Solicitud de Arrepentimiento'}</span>

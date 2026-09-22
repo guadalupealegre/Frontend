@@ -196,6 +196,54 @@ export async function eliminarProducto(id, token) {
   });
 }
 
+/**
+ * Suba la imagen oficial de un producto enviando FormData con la key 'archivo'.
+ * JAMÁS especifica el header Content-Type para permitir la generación automática de boundary.
+ */
+export async function subirImagenProducto(id, file, token) {
+  const url = `${API_BASE_URL}/productos/${id}/imagen`;
+  const formData = new FormData();
+  formData.append('archivo', file);
+
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      if (response.status === 413) {
+        throw new Error('Imagen muy grande');
+      }
+      if (response.status === 415) {
+        throw new Error('Formato no válido');
+      }
+      if (response.status === 403) {
+        throw new Error('Sin permisos');
+      }
+      if (response.status === 404) {
+        throw new Error('Producto no encontrado');
+      }
+
+      const errorMsg = await parseErrorResponse(response);
+      throw new Error(errorMsg);
+    }
+
+    return await response.json();
+  } catch (err) {
+    if (err.name === 'TypeError' && err.message.includes('fetch')) {
+      throw new Error('No se pudo conectar con el servidor para subir la imagen.');
+    }
+    throw err;
+  }
+}
+
 // ==========================================
 // SERVICIOS DE PEDIDOS Y COMPRAS (CLASE 8)
 // ==========================================

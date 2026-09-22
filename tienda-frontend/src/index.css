@@ -8,12 +8,12 @@
   }
   
   body {
-    background-color: #faf7f2;
-    color: #27140c;
+    background-color: #FAF8F5;
+    color: #3B111E;
     background-image: 
-      radial-gradient(at 95% 5%, rgba(254, 205, 211, 0.35) 0px, transparent 45%),
-      radial-gradient(at 5% 95%, rgba(254, 215, 170, 0.4) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(255, 241, 242, 0.5) 0px, transparent 70%);
+      radial-gradient(at 95% 5%, rgba(232, 93, 136, 0.08) 0px, transparent 45%),
+      radial-gradient(at 5% 95%, rgba(59, 17, 30, 0.05) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, rgba(254, 250, 243, 0.6) 0px, transparent 70%);
     background-attachment: fixed;
     min-height: 100vh;
   }

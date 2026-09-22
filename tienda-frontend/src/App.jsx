@@ -18,7 +18,7 @@ import Arrepentimiento from './pages/Arrepentimiento';
 
 export default function App() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#faf7f2] text-[#27140c]">
+    <div className="flex flex-col min-h-screen bg-[#FAF8F5] text-[#3B111E]">
       {/* Barra de Navegación Global */}
       <Navbar />
 
