@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#3B111E"/>
+  <rect x="60" y="100" width="280" height="200" rx="20" fill="#5C1B2E"/>
+  <rect x="80" y="120" width="240" height="35" fill="#4A1525"/>
+  <rect x="80" y="165" width="240" height="25" fill="#E85D88"/>
+  <rect x="80" y="200" width="240" height="35" fill="#4A1525"/>
+  <rect x="80" y="245" width="240" height="25" fill="#E85D88"/>
+  <text x="200" y="340" font-family="serif" font-size="22" font-weight="bold" fill="#FAF8F5" text-anchor="middle">Chocotorta Tradicional</text>
+</svg>

@@ -18,3 +18,10 @@ class ItemPedido(Base):
 
     def __repr__(self) -> str:
         return f"<ItemPedido(id={self.id}, pedido_id={self.pedido_id}, producto_id={self.producto_id}, cantidad={self.cantidad}, precio_unitario={self.precio_unitario})>"
+
+    @property
+    def producto_nombre(self) -> str:
+        if self.producto and hasattr(self.producto, 'nombre'):
+            return self.producto.nombre
+        return f"Producto #{self.producto_id}"
+

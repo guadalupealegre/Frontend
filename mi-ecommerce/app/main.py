@@ -1,22 +1,32 @@
 import os
+from pathlib import Path
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy import text
+from sqlalchemy.orm import Session
 
 from app.core.config import settings
 from app.db.database import Base, engine
+from app.dependencies import get_db
 # Importar todos los modelos para asegurar su registro en Base.metadata
 import app.models.producto
 import app.models.usuario
 import app.models.pedido
 import app.models.item_pedido
 import app.models.solicitud_revocacion
-from app.routers import auth_router, productos_router, pedidos_router, usuarios_router
+from app.routers import (
+    auth_router,
+    productos_router,
+    pedidos_router,
+    admin_pedidos_router,
+    usuarios_router,
+)
 
-# Garantizar creación del directorio de subidas de archivos
-os.makedirs("uploads/productos", exist_ok=True)
+# Garantizar creación de directorios estáticos
+Path("uploads/productos").mkdir(parents=True, exist_ok=True)
+Path("app/static/demo").mkdir(parents=True, exist_ok=True)
 
 
 @asynccontextmanager
@@ -24,7 +34,7 @@ async def lifespan(app: FastAPI):
     # Creación automática de todas las tablas en la base de datos al iniciar la app
     Base.metadata.create_all(bind=engine)
 
-    # Migración defensiva en SQLite para agregar la columna imagen_url si la tabla ya existía
+    # Migración defensiva en SQLite/PostgreSQL para agregar la columna imagen_url si la tabla ya existía
     try:
         with engine.connect() as conn:
             conn.execute(text("ALTER TABLE productos ADD COLUMN imagen_url VARCHAR(255);"))
@@ -54,23 +64,39 @@ try:
 except Exception:
     pass
 
-# Configuración de Middleware de CORS
+# Configuración de Middleware de CORS dinámico para Desarrollo y Producción en Render/Vercel
+origins = settings.origins
+allow_origins = origins if origins else ["*"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.origins,
+    allow_origins=allow_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app" if allow_origins != ["*"] else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Montar servidor de archivos estáticos para la carpeta uploads con el prefijo /static
+# Montar servidores de archivos estáticos
 app.mount("/static", StaticFiles(directory="uploads"), name="static")
+app.mount("/demo", StaticFiles(directory="app/static/demo"), name="demo")
 
 # Inclusión de Routers
 app.include_router(auth_router)
 app.include_router(productos_router)
 app.include_router(pedidos_router)
+app.include_router(admin_pedidos_router)
 app.include_router(usuarios_router)
+
+
+@app.get("/salud", tags=["Salud"], summary="Verificación de salud del backend y base de datos (Clase 11)")
+def salud(db: Session = Depends(get_db)):
+    """
+    Endpoint oficial de verificación de salud para Render / Vercel.
+    Ejecuta SELECT 1 en la base de datos para validar conectividad.
+    """
+    db.execute(text("SELECT 1"))
+    return {"estado": "ok", "base": "ok"}
 
 
 @app.get(
@@ -108,8 +134,9 @@ def read_root():
 @app.get(
     "/health",
     tags=["Información Legal & Estado"],
-    summary="Health check del servicio"
+    summary="Health check secundario del servicio"
 )
 def health_check():
     """Verificación de estado de salud del servidor."""
     return {"status": "healthy", "service": "Dulce Vicio API"}
+

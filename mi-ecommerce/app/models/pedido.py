@@ -20,3 +20,16 @@ class Pedido(Base):
 
     def __repr__(self) -> str:
         return f"<Pedido(id={self.id}, usuario_id={self.usuario_id}, estado='{self.estado}', total={self.total})>"
+
+    @property
+    def fecha(self) -> datetime:
+        return self.fecha_creacion
+
+    @property
+    def monto_total(self) -> float:
+        return float(self.total) if self.total is not None else 0.0
+
+    @property
+    def detalles(self):
+        return self.items
+

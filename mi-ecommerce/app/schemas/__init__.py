@@ -21,6 +21,10 @@ from app.schemas.pedido import (
     ItemOut,
     PedidoOut,
     SolicitudRevocacionOut,
+    UsuarioClienteOut,
+    DetallePedidoOut,
+    PedidoAdminOut,
+    PedidoEstadoUpdate,
 )
 
 __all__ = [
@@ -42,4 +46,9 @@ __all__ = [
     "ItemOut",
     "PedidoOut",
     "SolicitudRevocacionOut",
+    "UsuarioClienteOut",
+    "DetallePedidoOut",
+    "PedidoAdminOut",
+    "PedidoEstadoUpdate",
 ]
+

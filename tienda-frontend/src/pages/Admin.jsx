@@ -9,6 +9,7 @@ import {
   eliminarProducto,
   subirImagenProducto,
 } from '../services/api';
+import AdminPedidos from '../components/AdminPedidos';
 import {
   ShieldCheck,
   Plus,
@@ -24,10 +25,13 @@ import {
   Sparkles,
   Upload,
   Image as ImageIcon,
+  ShoppingBag,
 } from 'lucide-react';
 
-export default function Admin() {
+export default function Admin({ tabInicial = 'catalogo' }) {
   const { token } = useAuth();
+  const [tabActiva, setTabActiva] = useState(tabInicial);
+
 
   const [productos, setProductos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -253,33 +257,70 @@ export default function Admin() {
         <div className="space-y-1">
           <div className="inline-flex items-center space-x-2 text-[#E85D88] text-xs font-bold uppercase tracking-wider">
             <ShieldCheck className="w-4 h-4 text-[#E85D88]" />
-            <span>Administración Oficial</span>
+            <span>Panel de Administración Oficial</span>
           </div>
           <h1 className="font-serif font-bold text-3xl text-white">
-            Gestión del Catálogo de Dulce Vicio
+            {tabActiva === 'pedidos' ? 'Gestión de Pedidos' : 'Gestión del Catálogo'}
           </h1>
           <p className="text-xs sm:text-sm text-rose-100/80">
-            Administrá precios finales, cuotas, stock y fotos oficiales con cumplimiento legal (Ley 24.240).
+            {tabActiva === 'pedidos'
+              ? 'Visualizá los pedidos de los clientes, clientes compradores, productos incluidos, montos y estados transaccionales.'
+              : 'Administrá precios finales, cuotas, stock y fotos oficiales con cumplimiento legal (Ley 24.240).'}
           </p>
         </div>
 
-        <div className="flex items-center space-x-3">
-          <button
-            onClick={cargarLista}
-            className="p-3.5 bg-white/10 hover:bg-white/20 text-white rounded-2xl transition-colors"
-            title="Recargar catálogo"
-          >
-            <RefreshCw className={`w-5 h-5 ${cargando ? 'animate-spin' : ''}`} />
-          </button>
-          <button
-            onClick={abrirModalCrear}
-            className="px-6 py-3.5 bg-[#E85D88] hover:bg-[#D81B60] text-white text-xs font-bold uppercase tracking-wider rounded-2xl shadow-lg shadow-[#E85D88]/30 flex items-center space-x-2 transition-transform hover:scale-105"
-          >
-            <Plus className="w-5 h-5" />
-            <span>Nuevo Postre</span>
-          </button>
-        </div>
+        {tabActiva === 'catalogo' && (
+          <div className="flex items-center space-x-3">
+            <button
+              onClick={cargarLista}
+              className="p-3.5 bg-white/10 hover:bg-white/20 text-white rounded-2xl transition-colors"
+              title="Recargar catálogo"
+            >
+              <RefreshCw className={`w-5 h-5 ${cargando ? 'animate-spin' : ''}`} />
+            </button>
+            <button
+              onClick={abrirModalCrear}
+              className="px-6 py-3.5 bg-[#E85D88] hover:bg-[#D81B60] text-white text-xs font-bold uppercase tracking-wider rounded-2xl shadow-lg shadow-[#E85D88]/30 flex items-center space-x-2 transition-transform hover:scale-105"
+            >
+              <Plus className="w-5 h-5" />
+              <span>Nuevo Postre</span>
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* Selector de Pestañas (Catálogo vs Pedidos) */}
+      <div className="flex items-center space-x-3 bg-white p-2 rounded-2xl border border-rose-200/80 shadow-xs max-w-fit">
+        <button
+          onClick={() => setTabActiva('catalogo')}
+          className={`px-5 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+            tabActiva === 'catalogo'
+              ? 'bg-[#3B111E] text-white shadow-sm'
+              : 'text-stone-600 hover:bg-rose-50'
+          }`}
+        >
+          <Package className="w-4 h-4" />
+          <span>Catálogo de Postres</span>
+        </button>
+
+        <button
+          onClick={() => setTabActiva('pedidos')}
+          className={`px-5 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
+            tabActiva === 'pedidos'
+              ? 'bg-[#3B111E] text-white shadow-sm'
+              : 'text-stone-600 hover:bg-rose-50'
+          }`}
+        >
+          <ShoppingBag className="w-4 h-4 text-[#E85D88]" />
+          <span>Gestión de Pedidos</span>
+        </button>
+      </div>
+
+      {tabActiva === 'pedidos' ? (
+        <AdminPedidos />
+      ) : (
+        <>
+
 
       {/* Alertas */}
       {mensajeExito && (
@@ -662,6 +703,9 @@ export default function Admin() {
           </div>
         )}
       </AnimatePresence>
+        </>
+      )}
     </motion.div>
   );
 }
+

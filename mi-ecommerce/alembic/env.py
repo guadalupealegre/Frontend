@@ -29,8 +29,13 @@ if config.config_file_name is not None:
 # Asignar metadata de los modelos para autogenerate
 target_metadata = Base.metadata
 
-# Sobrescribir sqlalchemy.url con el valor dinámico de settings
-config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
+# Sobrescribir sqlalchemy.url con el valor dinámico de settings (escapando % para alembic)
+db_url = settings.DATABASE_URL
+if db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+config.set_main_option("sqlalchemy.url", db_url.replace("%", "%%"))
+
 
 
 def run_migrations_offline() -> None:

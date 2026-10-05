@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FAF8F5"/>
+  <rect x="70" y="80" width="260" height="240" rx="30" fill="#FFF1F5" stroke="#E85D88" stroke-width="4"/>
+  <circle cx="140" cy="140" r="30" fill="#F48FB1"/>
+  <circle cx="200" cy="140" r="30" fill="#CE93D8"/>
+  <circle cx="260" cy="140" r="30" fill="#80CBC4"/>
+  <circle cx="140" cy="220" r="30" fill="#FFE082"/>
+  <circle cx="200" cy="220" r="30" fill="#FFAB91"/>
+  <circle cx="260" cy="220" r="30" fill="#F48FB1"/>
+  <text x="200" y="360" font-family="serif" font-size="22" font-weight="bold" fill="#3B111E" text-anchor="middle">Box Macarons Surtidos</text>
+</svg>

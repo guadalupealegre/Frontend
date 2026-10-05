@@ -3,7 +3,7 @@
  * Maneja llamadas HTTP, conversión de parámetros, headers JWT, pedidos transaccionales y traducción de errores.
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
 /**
  * Traduce respuestas de error HTTP a mensajes claros en español.
@@ -304,6 +304,22 @@ export async function revocarPedido(pedidoId, token) {
   });
 }
 
+/**
+ * Revoca un pedido de forma pública sin requerir token (Prueba 5 - Disp. 954/2025).
+ * @param {{ pedido_id: number, email: string }} payload
+ */
+export async function revocarPublico({ pedido_id, email }) {
+  return await request('/pedidos/revocacion-publica', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      pedido_id: Number(pedido_id),
+      email: email.trim(),
+    }),
+  });
+}
+
+
 // ==========================================
 // SERVICIOS DE USUARIOS Y PROTECCIÓN DE DATOS (CLASE 9)
 // ==========================================
@@ -364,3 +380,33 @@ export async function eliminarMiCuenta(token) {
     headers: authHeaders(token),
   });
 }
+
+// ==========================================
+// SERVICIOS DE GESTIÓN DE PEDIDOS PARA ADMIN
+// ==========================================
+
+/**
+ * Obtiene la lista completa de pedidos para la administración (Solo Admin).
+ * @param {string} token
+ */
+export async function getAdminPedidos(token) {
+  return await request('/admin/pedidos', {
+    method: 'GET',
+    headers: authHeaders(token),
+  });
+}
+
+/**
+ * Actualiza el estado de un pedido específico (Solo Admin).
+ * @param {number} id
+ * @param {string} estado
+ * @param {string} token
+ */
+export async function actualizarEstadoPedido(id, estado, token) {
+  return await request(`/admin/pedidos/${id}/estado`, {
+    method: 'PATCH',
+    headers: authHeaders(token),
+    body: JSON.stringify({ estado }),
+  });
+}
+

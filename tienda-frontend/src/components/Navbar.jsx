@@ -266,13 +266,30 @@ export default function Navbar() {
             </Link>
 
             {esAdmin && (
-              <Link
-                to="/admin"
-                className="bg-[#3B111E] text-white px-3 py-1.5 rounded-full font-bold text-[11px] hover:bg-[#5C1B2E] transition-colors"
-              >
-                ADMIN
-              </Link>
+              <div className="flex items-center space-x-2">
+                <Link
+                  to="/admin"
+                  className={`px-3 py-1.5 rounded-full font-bold text-[11px] transition-colors ${
+                    esLinkActivo('/admin')
+                      ? 'bg-[#3B111E] text-white'
+                      : 'bg-rose-100 text-[#3B111E] hover:bg-rose-200'
+                  }`}
+                >
+                  CATÁLOGO
+                </Link>
+                <Link
+                  to="/admin/pedidos"
+                  className={`px-3 py-1.5 rounded-full font-bold text-[11px] transition-colors ${
+                    esLinkActivo('/admin/pedidos')
+                      ? 'bg-[#3B111E] text-white'
+                      : 'bg-[#E85D88] text-white hover:bg-[#D81B60]'
+                  }`}
+                >
+                  PEDIDOS
+                </Link>
+              </div>
             )}
+
 
             <a
               href="#contacto"
@@ -365,14 +382,24 @@ export default function Navbar() {
             </Link>
 
             {esAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setMenuAbierto(false)}
-                className="block py-2 text-[#3B111E] font-bold"
-              >
-                PANEL ADMIN
-              </Link>
+              <>
+                <Link
+                  to="/admin"
+                  onClick={() => setMenuAbierto(false)}
+                  className="block py-2 text-[#3B111E] font-bold"
+                >
+                  PANEL ADMIN - CATÁLOGO
+                </Link>
+                <Link
+                  to="/admin/pedidos"
+                  onClick={() => setMenuAbierto(false)}
+                  className="block py-2 text-[#E85D88] font-bold"
+                >
+                  PANEL ADMIN - PEDIDOS
+                </Link>
+              </>
             )}
+
 
             <a
               href="#contacto"

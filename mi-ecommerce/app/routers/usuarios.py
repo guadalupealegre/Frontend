@@ -1,7 +1,7 @@
 import json
 import secrets
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
 
 from app.core.security import hash_password
@@ -9,13 +9,47 @@ from app.dependencies import get_db, get_current_user
 from app.models.usuario import Usuario
 from app.models.pedido import Pedido
 from app.models.solicitud_revocacion import SolicitudRevocacion
-from app.schemas.usuario import DatosUsuarioCompleto, UsuarioOut, SolicitudRevocacionSimple
+from app.schemas.usuario import DatosUsuarioCompleto, UsuarioCreate, UsuarioOut, SolicitudRevocacionSimple
 from app.schemas.pedido import PedidoOut
 
 router = APIRouter(
     prefix="/usuarios",
     tags=["Usuarios & Protección de Datos (Ley 25.326)"],
 )
+
+
+@router.post(
+    "/registro",
+    response_model=UsuarioOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Registrar nuevo usuario con consentimiento (Ley 25.326)",
+    description="Registra un nuevo usuario haseando la contraseña con passlib/bcrypt y guardando la fecha de consentimiento en UTC."
+)
+def registrar_usuario(
+    datos: UsuarioCreate,
+    db: Session = Depends(get_db)
+):
+    usuario_existente = db.query(Usuario).filter(Usuario.email == datos.email.lower().strip()).first()
+    if usuario_existente:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="El correo electrónico ingresado ya se encuentra registrado en Dulce Vicio."
+        )
+
+    nuevo_usuario = Usuario(
+        nombre=datos.nombre.strip(),
+        email=datos.email.lower().strip(),
+        hashed_password=hash_password(datos.password),
+        rol="cliente",
+        acepto_tratamiento=datos.acepto_tratamiento,
+        fecha_consentimiento=datetime.now(timezone.utc) if datos.acepto_tratamiento else None
+    )
+
+    db.add(nuevo_usuario)
+    db.commit()
+    db.refresh(nuevo_usuario)
+    return nuevo_usuario
+
 
 
 @router.get(

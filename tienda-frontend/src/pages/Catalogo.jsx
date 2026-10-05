@@ -29,11 +29,29 @@ export default function Catalogo() {
   const [total, setTotal] = useState(0);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [mostrarMensajeRender, setMostrarMensajeRender] = useState(false);
 
   // Estados de filtros y paginación
   const [busqueda, setBusqueda] = useState('');
   const [precioMax, setPrecioMax] = useState('');
   const [pagina, setPagina] = useState(0); // 0-indexed
+
+  // Timer para avisar si el servidor de Render se está despertando (Cold Start > 3s)
+  useEffect(() => {
+    let timerRender;
+    if (cargando) {
+      timerRender = setTimeout(() => {
+        setMostrarMensajeRender(true);
+      }, 3000);
+    } else {
+      setMostrarMensajeRender(false);
+    }
+
+    return () => {
+      if (timerRender) clearTimeout(timerRender);
+    };
+  }, [cargando]);
+
 
   useEffect(() => {
     let cancelado = false;
@@ -298,13 +316,31 @@ export default function Catalogo() {
           </div>
         )}
 
-        {/* Renderizado de Tarjetas */}
+        {/* Estado de Carga con Cartel "Despertando Servidor" */}
         {cargando ? (
-          <div className="min-h-[320px] flex flex-col items-center justify-center space-y-3">
-            <Loader2 className="w-9 h-9 text-[#E85D88] animate-spin" />
+          <div className="min-h-[320px] flex flex-col items-center justify-center space-y-4 py-8">
+            <Loader2 className="w-10 h-10 text-[#E85D88] animate-spin" />
             <p className="text-xs font-semibold text-stone-600">Cargando especialidades de Dulce Vicio...</p>
+            
+            {/* Cartel Informativo de Cold Start en Render (Clase 11) */}
+            {mostrarMensajeRender && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-amber-50 border border-amber-200 text-amber-900 p-4.5 rounded-2xl flex items-center space-x-3.5 text-xs max-w-md mx-auto shadow-sm"
+              >
+                <Coffee className="w-6 h-6 text-amber-600 animate-bounce shrink-0" />
+                <div>
+                  <span className="font-bold text-amber-950 block">Despertando servidor en Render...</span>
+                  <span className="text-[11px] text-amber-800 leading-snug block mt-0.5">
+                    En el plan gratuito de Render el servicio entra en reposo por inactividad. La primera carga puede demorar hasta 1 minuto. ¡Gracias por la paciencia! ☕
+                  </span>
+                </div>
+              </motion.div>
+            )}
           </div>
         ) : productos.length === 0 ? (
+
           <div className="bg-white rounded-3xl p-12 text-center border border-rose-200/80 space-y-3 shadow-sm">
             <p className="text-5xl">🧁</p>
             <h3 className="font-serif font-bold text-xl text-[#3B111E]">No encontramos postres</h3>

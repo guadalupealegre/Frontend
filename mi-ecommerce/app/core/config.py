@@ -1,4 +1,5 @@
 import json
+import os
 from typing import List, Union
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -10,9 +11,8 @@ class Settings(BaseSettings):
     CORS_ORIGINS: Union[str, List[str]] = [
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "http://localhost:3000",
     ]
-    SECRET_KEY: str = "dulce_vicio_super_secret_jwt_key_2026_reposteria_artesanal_segura"
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "dulce_vicio_super_secret_jwt_key_2026_reposteria_artesanal_segura")
     ALGORITHM: str = "HS256"
     ACCESS_MIN: int = 30
     REFRESH_MIN: int = 10080  # 7 días en minutos
@@ -42,3 +42,4 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+

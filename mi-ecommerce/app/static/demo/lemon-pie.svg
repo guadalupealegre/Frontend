@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#FFFDE7"/>
+  <circle cx="200" cy="190" r="130" fill="#FFF59D"/>
+  <path d="M 100,190 Q 200,80 300,190" fill="#FFFFFF"/>
+  <circle cx="160" cy="160" r="15" fill="#FFFFFF"/>
+  <circle cx="200" cy="140" r="18" fill="#FFFFFF"/>
+  <circle cx="240" cy="160" r="15" fill="#FFFFFF"/>
+  <text x="200" y="350" font-family="serif" font-size="22" font-weight="bold" fill="#3B111E" text-anchor="middle">Lemon Pie Gourmet</text>
+</svg>

@@ -15,13 +15,16 @@ def crear_engine_seguro():
     (como UnicodeDecodeError en Windows con psycopg2) o falla de conexión,
     conmuta automáticamente a SQLite local seguro (sqlite:///./dulce_vicio.db).
     """
-    db_url = getattr(settings, "DATABASE_URL", "sqlite:///./dulce_vicio.db")
+    db_url = getattr(settings, "DATABASE_URL", "sqlite:///./dulce_vicio.db") or "sqlite:///./dulce_vicio.db"
+    if db_url.startswith("postgres://"):
+        db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-    if not db_url or db_url.startswith("sqlite"):
+    if db_url.startswith("sqlite"):
         return create_engine(
-            db_url or "sqlite:///./dulce_vicio.db",
+            db_url,
             connect_args={"check_same_thread": False},
         )
+
 
     try:
         eng = create_engine(db_url, pool_pre_ping=True)

@@ -14,6 +14,11 @@ def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
 
+# Alias para coincidencia con convenios de nombrado
+obtener_password_hash = hash_password
+
+
+
 def verificar_password(plain_password: str, hashed_password: str) -> bool:
     """Verifica si la contraseña ingresada coincide con el hash almacenado."""
     return pwd_context.verify(plain_password, hashed_password)

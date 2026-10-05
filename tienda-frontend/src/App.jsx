@@ -65,10 +65,20 @@ export default function App() {
             path="/admin"
             element={
               <RutaProtegida soloAdmin={true}>
-                <Admin />
+                <Admin tabInicial="catalogo" />
               </RutaProtegida>
             }
           />
+
+          <Route
+            path="/admin/pedidos"
+            element={
+              <RutaProtegida soloAdmin={true}>
+                <Admin tabInicial="pedidos" />
+              </RutaProtegida>
+            }
+          />
+
 
           {/* Redirección por defecto */}
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -2,15 +2,84 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.dependencies import get_db, get_current_user
+from app.dependencies import get_db, get_current_user, get_current_admin_user
 from app.models.usuario import Usuario
-from app.schemas.pedido import PedidoCreate, PedidoOut, SolicitudRevocacionOut
+from app.schemas.pedido import (
+    PedidoCreate,
+    PedidoOut,
+    SolicitudRevocacionOut,
+    RevocacionPublicaRequest,
+    PedidoAdminOut,
+    PedidoEstadoUpdate,
+)
 from app.services import pedido_service
 
 router = APIRouter(
     prefix="/pedidos",
     tags=["Pedidos & Compras Transaccionales"],
 )
+
+admin_pedidos_router = APIRouter(
+    prefix="/admin/pedidos",
+    tags=["Administración - Pedidos"],
+)
+
+
+@admin_pedidos_router.get(
+    "",
+    response_model=List[PedidoAdminOut],
+    summary="Listar todos los pedidos de clientes (Solo Admin)",
+    description="Retorna la lista completa de todos los pedidos realizados por los clientes en la tienda Dulce Vicio, ordenados del más reciente al más antiguo.",
+)
+def admin_listar_todos_los_pedidos(
+    db: Session = Depends(get_db),
+    admin_user: Usuario = Depends(get_current_admin_user),
+):
+    """
+    Endpoint de administración exclusivo para listar la totalidad de pedidos realizados por los clientes.
+    """
+    return pedido_service.listar_todos_los_pedidos(db=db)
+
+
+@admin_pedidos_router.patch(
+    "/{pedido_id}/estado",
+    response_model=PedidoAdminOut,
+    summary="Actualizar estado de un pedido (Solo Admin)",
+    description="Permite al administrador modificar el estado de un pedido (ej: 'confirmado', 'en preparación', 'listo para entrega', 'entregado', 'cancelado', 'revocado').",
+)
+def admin_actualizar_estado_pedido(
+    pedido_id: int,
+    datos: PedidoEstadoUpdate,
+    db: Session = Depends(get_db),
+    admin_user: Usuario = Depends(get_current_admin_user),
+):
+    """
+    Endpoint de administración exclusivo para cambiar el estado transaccional de un pedido.
+    """
+    return pedido_service.actualizar_estado_pedido(
+        db=db,
+        pedido_id=pedido_id,
+        nuevo_estado=datos.estado,
+    )
+
+
+
+@router.post(
+    "/revocacion-publica",
+    response_model=SolicitudRevocacionOut,
+    status_code=status.HTTP_201_CREATED,
+    summary="Revocación pública sin token (Disp. 954/2025)",
+    description="Permite revocar un pedido públicamente mediante ID de pedido y e-mail sin requerir header Authorization."
+)
+def revocar_pedido_publico(
+    datos: RevocacionPublicaRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Endpoint público de revocación de compra sin token.
+    """
+    return pedido_service.revocar_publico(db=db, pedido_id=datos.pedido_id, email=datos.email)
+
 
 
 @router.post(

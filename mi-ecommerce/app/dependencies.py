@@ -73,3 +73,8 @@ def require_admin(
             detail="Acceso restringido: se requieren permisos de administrador de Dulce Vicio.",
         )
     return current_user
+
+
+# Alias get_current_admin_user para coincidencia exacta con los requisitos de FastAPI
+get_current_admin_user = require_admin
+
