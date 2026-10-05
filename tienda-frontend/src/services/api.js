@@ -11,7 +11,7 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 export async function parseErrorResponse(response) {
   try {
     const data = await response.json();
-    
+
     // Manejo de errores de validación de FastAPI (422 Pydantic)
     if (response.status === 422 && Array.isArray(data.detail)) {
       const mensajes = data.detail.map((err) => {
@@ -105,7 +105,7 @@ async function request(endpoint, options = {}) {
 // ==========================================
 
 export async function registrar({ nombre, email, password, acepto_tratamiento }) {
-  return await request('/auth/register', {
+  return await request('/auth/register/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
@@ -122,7 +122,7 @@ export async function login({ username, password }) {
   formParams.append('username', username);
   formParams.append('password', password);
 
-  return await request('/auth/login', {
+  return await request('/auth/login/', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -132,7 +132,7 @@ export async function login({ username, password }) {
 }
 
 export async function refreshToken(refresh_token) {
-  return await request('/auth/refresh', {
+  return await request('/auth/refresh/', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ refresh_token }),
@@ -140,7 +140,7 @@ export async function refreshToken(refresh_token) {
 }
 
 export async function getMe(token) {
-  return await request('/auth/me', {
+  return await request('/auth/me/', {
     method: 'GET',
     headers: authHeaders(token),
   });
@@ -154,7 +154,7 @@ export async function getProductos({ skip = 0, limit = 10, nombre = '', precio_m
   const params = new URLSearchParams();
   params.append('skip', skip.toString());
   params.append('limit', limit.toString());
-  
+
   if (nombre && nombre.trim() !== '') {
     params.append('nombre', nombre.trim());
   }
@@ -319,7 +319,6 @@ export async function revocarPublico({ pedido_id, email }) {
   });
 }
 
-
 // ==========================================
 // SERVICIOS DE USUARIOS Y PROTECCIÓN DE DATOS (CLASE 9)
 // ==========================================
@@ -409,4 +408,3 @@ export async function actualizarEstadoPedido(id, estado, token) {
     body: JSON.stringify({ estado }),
   });
 }
-
